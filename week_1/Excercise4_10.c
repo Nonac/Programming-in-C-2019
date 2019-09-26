@@ -1,11 +1,20 @@
 #include<stdio.h>
+
+void hailstone(int n);
+
 int main()
 {
-	int i,n;
+	int n;
 	printf("Please enter an number:");
 	scanf("%d",&n);
 	printf("The hailstone sequence is:\n%d\n",n);
-	for(i=0:i<9;i++)
+	hailstone(n);
+	}
+
+void hailstone(int n)
+{
+	int i;
+	for(i=0;i<9;i++)
 	{
 		if(n%2==0)
 		{
@@ -17,4 +26,5 @@ int main()
 			printf("%d\n",n);
 		}
 	}
+
 }
