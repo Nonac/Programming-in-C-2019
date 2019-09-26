@@ -3,8 +3,9 @@
 
 int main()
 {
-	printf("Enter three integer values which represent sides of a triangle:");
+	
 	double a,b,c,temp,Pythagorean;
+	printf("Enter three integer values which represent sides of a triangle:");
 	scanf("%lf",&a);
 	while(a<=0)
 	{

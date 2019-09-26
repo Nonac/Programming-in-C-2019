@@ -14,8 +14,8 @@ Time subtract(Time *first,Time *second);
 int main()
 {
 	Time time1,time2,time3;
-	printf("Enter two times :");
 	int again=1;
+	printf("Enter two times :");
 	while(again)
 	{
 		scanf("%d:%d",&time1.hours,&time1.minutes);

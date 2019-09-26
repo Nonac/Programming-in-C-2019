@@ -1,20 +1,6 @@
 #include<stdio.h>
 
-char isvowel(char c)
-{
-	char vowel[] = "aeiou";
-	char nonvowels[] ="BCDFGHJKLMNPQRSTVWXYZ";
-	for(int i=0;vowel[i]!='\0';i++)
-	{
-		if(c==vowel[i]) c-=32;
-	}
-	for(int i=0;nonvowels[i]!='\0';i++)
-	{
-		if(c==nonvowels[i]) c+=32;
-	}
-	return c;
-}
-
+char isvowel(char c);
 
 int main()
 {
@@ -26,4 +12,21 @@ int main()
 		putchar(c);
 	}
 	return 0;
+}
+
+
+char isvowel(char c)
+{
+	char vowel[] = "aeiou";
+	char nonvowels[] ="BCDFGHJKLMNPQRSTVWXYZ";
+	int i;
+	for(i=0;vowel[i]!='\0';i++)
+	{
+		if(c==vowel[i]) c-=32;
+	}
+	for(i=0;nonvowels[i]!='\0';i++)
+	{
+		if(c==nonvowels[i]) c+=32;
+	}
+	return c;
 }

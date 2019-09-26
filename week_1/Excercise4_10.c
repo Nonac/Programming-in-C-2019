@@ -1,8 +1,8 @@
 #include<stdio.h>
 int main()
 {
-	printf("Please enter an number:");
 	int i,n;
+	printf("Please enter an number:");
 	scanf("%d",&n);
 	printf("The hailstone sequence is:\n%d\n",n);
 	for(i=0:i<9;i++)

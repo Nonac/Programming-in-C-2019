@@ -12,13 +12,40 @@ typedef struct
 	int number;
 }Status;
 
+void bet(Status *status);
+void game(int res,Status *status);
+
+int main()
+{
+	int res,cnt=0;
+	Status status;
+	status.wallet=10;
+	
+	srand((unsigned)time(NULL));	
+	printf("Now you have $%d.\n",status.wallet);
+
+	while(status.wallet>0)
+	{
+		res=rand()%36;
+		status.wallet--;
+
+		bet(&status);
+		game(res,&status);
+		cnt++;
+		printf("\nNow you have $%d.\n",status.wallet);
+	}
+
+	printf("You played %d times.\n",cnt);
+	return 0;
+}
+
 void bet(Status *status)
 {
+	int key1,key2,key3;
 	status->odd=FALSE;
 	status->even=FALSE;
 	status->number=36;
 	printf("\nPlace an odd/even bet, or a bet on a particular number?\n1.odd/even bet\n2.particular number");
-	int key1,key2,key3;
 	scanf("%d",&key1);
 
 	while(!(key1==1)&&!(key1==2))
@@ -74,26 +101,4 @@ void game(int res,Status *status)
 	else printf("The result is %d. You lose $1.\n",res);
 }
 
-int main()
-{
-	int res,cnt=0;
-	Status status;
-	status.wallet=10;
-	
-	srand((unsigned)time(NULL));	
-	printf("Now you have $%d.\n",status.wallet);
 
-	while(status.wallet>0)
-	{
-		res=rand()%36;
-		status.wallet--;
-
-		bet(&status);
-		game(res,&status);
-		cnt++;
-		printf("\nNow you have $%d.\n",status.wallet);
-	}
-
-	printf("You played %d times.\n",cnt);
-	return 0;
-}

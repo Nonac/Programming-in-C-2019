@@ -3,8 +3,8 @@
 
 int main()
 {
-	printf("How many primes do you want to print out?");
 	int n,cnt=1,temp=2,sqt;
+	printf("How many primes do you want to print out?");
 	scanf("%d",&n);
 	for (temp;cnt<=n;temp++)
 	{
