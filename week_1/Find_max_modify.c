@@ -22,4 +22,5 @@ int main()
 		if(max<temp) max=temp;
 	}
 	printf("Maximum value: %d\n",max);
+	return 0;
 }

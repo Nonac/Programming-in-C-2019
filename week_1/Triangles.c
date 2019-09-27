@@ -48,20 +48,21 @@ int main()
 	
 	Pythagorean=b*b+c*c;	
 
-	if ((a==b)&&(a==c))
+	if (((a>=b)&&(a<=b))&&((a>=c)&&(a<=c)))
 	{
-		printf("The values of the three sides are %lf %lf and %lf. This is an equilateral.\n",a,b,c);
-	}else if(Pythagorean==(a*a))
+		printf("The values of the three sides are %f %f and %f. This is an equilateral.\n",a,b,c);
+	}else if((Pythagorean>=(a*a))&&(Pythagorean<=(a*a)))
 	{
-		if ((a==b)||(a==c)||(b==c))
+		if (((a>=b)&&(a<=b))||((a>=c)&&(a<=c))||((b>=c)&&(b<=c)))
 		{
-			printf("The values of the three sides are %lf %lf and %lf. This is a right angled isosceles.\n",a,b,c);
-		}else printf("The values of the three sides are %lf %lf and %lf. This is a right angled.\n",a,b,c);
+			printf("The values of the three sides are %f %f and %f. This is a right angled isosceles.\n",a,b,c);
+		}else printf("The values of the three sides are %f %f and %f. This is a right angled.\n",a,b,c);
 	}else
-	{
-		if ((a==b)||(a==c)||(b==c))
+	{ 
+		if (((a>=b)&&(a<=b))||((a>=c)&&(a<=c))||((b>=c)&&(b<=c)))
 		{
-			printf("The values of the three sides are %lf %lf and %lf. This is an isosceles.\n",a,b,c);
-		}else printf("The values of the three sides are %lf %lf and %lf. This is a scalene.\n",a,b,c);
+			printf("The values of the three sides are %f %f and %f. This is an isosceles.\n",a,b,c);
+		}else printf("The values of the three sides are %f %f and %f. This is a scalene.\n",a,b,c);
 	}
+	return 0;
 }

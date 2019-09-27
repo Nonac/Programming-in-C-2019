@@ -12,5 +12,6 @@ int main()
 		scanf("%lf",&temp);
 		if(max<temp) max=temp;
 	}
-	printf("Maximum value: %5.2lf\n",max);
+	printf("Maximum value: %5f\n",max);
+	return 0;
 }

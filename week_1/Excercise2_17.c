@@ -13,4 +13,5 @@ int main()
 		else plus_cnt++;
 		printf("%d\n",(plus_cnt-minus_cnt));
 	}
+	return 0;
 }

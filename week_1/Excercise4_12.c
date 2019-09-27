@@ -3,20 +3,21 @@
 
 int main()
 {
-	int n,cnt=1,temp=2,sqt;
+	int n,cnt=1,temp,sqt,flag=0;
 	printf("How many primes do you want to print out?");
 	scanf("%d",&n);
-	for (temp;cnt<=n;temp++)
+	for (temp=2;cnt<=n;temp++)
 	{
 		for(sqt=2;sqt<temp;sqt++)
 		{
-			if(temp%sqt==0) break;
+			if(temp%sqt==0) flag=1;
 		}
-		if(temp==sqt)
+		if((temp==sqt)&&(flag==0))
 		{
 			printf("%d ",temp);
 			cnt++;
 		}
+		flag =0;
 	}
 	printf("\n");
 	return 0;	

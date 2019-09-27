@@ -41,6 +41,7 @@ int main()
 	printf("Difference is:");
 	printTime(time3);
 	printf("\n");
+	return 0;
 }
 
 int checkTime(Time time)

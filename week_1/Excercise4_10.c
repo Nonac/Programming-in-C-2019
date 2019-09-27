@@ -9,7 +9,8 @@ int main()
 	scanf("%d",&n);
 	printf("The hailstone sequence is:\n%d\n",n);
 	hailstone(n);
-	}
+	return 0;
+}
 
 void hailstone(int n)
 {
