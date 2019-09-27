@@ -1,4 +1,6 @@
 #include<stdio.h>
+#define FAR 'a'-'A'
+
 
 char isvowel(char c);
 
@@ -22,11 +24,11 @@ char isvowel(char c)
 	int i;
 	for(i=0;vowel[i]!='\0';i++)
 	{
-		if(c==vowel[i]) c-=32;
+		if(c==vowel[i]) c-=FAR;
 	}
 	for(i=0;nonvowels[i]!='\0';i++)
 	{
-		if(c==nonvowels[i]) c+=32;
+		if(c==nonvowels[i]) c+=FAR;
 	}
 	return c;
 }
