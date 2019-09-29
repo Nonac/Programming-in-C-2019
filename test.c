@@ -24,7 +24,7 @@ void Next(char *T,int *next)
                         j++;
                         next[i]=j;
                 }else{
-                        j=next[i];
+                        j=next[j];
                 }
 
 }

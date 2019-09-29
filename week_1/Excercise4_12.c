@@ -4,15 +4,17 @@
 int main()
 {
 	int n,cnt=1,temp,sqt,flag=0;
+	double f;
 	printf("How many primes do you want to print out?");
 	scanf("%d",&n);
 	for (temp=2;cnt<=n;temp++)
 	{
-		for(sqt=2;sqt<temp;sqt++)
+		f=sqrt((float)temp);
+		for(sqt=2;((sqt<f)&&(flag==0));sqt++)
 		{
 			if(temp%sqt==0) flag=1;
 		}
-		if((temp==sqt)&&(flag==0))
+		if((sqt>f)&&(flag==0))
 		{
 			printf("%d ",temp);
 			cnt++;
