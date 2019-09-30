@@ -12,8 +12,8 @@ typedef struct
 	int number;
 }Status;
 
-void bet(Status *status);
-void game(int res,Status *status);
+void Bet(Status *status);
+void Game(int res,Status *status);
 
 int main()
 {
@@ -22,24 +22,24 @@ int main()
 	status.wallet=10;
 	
 	srand((unsigned)time(NULL));	
-	printf("Now you have $%d.\n",status.wallet);
+	printf("\nNow you have $%d.\n",status.wallet);
 
 	while(status.wallet>0)
 	{
 		res=rand()%36;
 		status.wallet--;
 
-		bet(&status);
-		game(res,&status);
+		Bet(&status);
+		Game(res,&status);
 		cnt++;
 		printf("\nNow you have $%d.\n",status.wallet);
 	}
 
-	printf("You played %d times.\n",cnt);
+	printf("\nNow,you lose all the money!\nYou played %d times.\n",cnt);
 	return 0;
 }
 
-void bet(Status *status)
+void Bet(Status *status)
 {
 	int key1,key2,key3;
 	status->odd=FALSE;
@@ -81,7 +81,7 @@ void bet(Status *status)
 	}
 }
 
-void game(int res,Status *status)
+void Game(int res,Status *status)
 {
 	if ((status->odd==TRUE)&&(res%2==1)&&(res!=0)) 
 	{
@@ -100,5 +100,3 @@ void game(int res,Status *status)
 	}
 	else printf("The result is %d. You lose $1.\n",res);
 }
-
-
