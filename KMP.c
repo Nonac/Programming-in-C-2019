@@ -7,8 +7,8 @@ int KMP(char *S,char *T);
 
 int main()
 {
-	int i=KMP("ababcabcacbab","abcac");
-	printf("%d",i);
+	int i=KMP("aaaaa","bba");
+	printf("%d\n",i);
 	return 0;
 }
 
@@ -26,6 +26,7 @@ void Next(char *T,int *next)
                 }else{
                         j=next[j];
                 }
+	}
 
 }
 
@@ -48,7 +49,7 @@ int KMP(char *S,char *T)
 	}	
 	if(j>strlen(T))
 	{
-		return (i-(int)strlen(T));
+		return (i-(int)strlen(T)-1);
 	}
 	return -1;
 }

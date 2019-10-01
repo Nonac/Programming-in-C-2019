@@ -27,15 +27,15 @@ int main()
 		else again=0;
 	}
 	again=1;
-        	while(again)
-        	{
-            		scanf("%d:%d",&time2.hours,&time2.minutes);
+        while(again)
+       	{
+         	scanf("%d:%d",&time2.hours,&time2.minutes);
 		if(checkTime(time2))
-            		{
-                			printf("Invalid format, please re-enter:");
-                			again=1;
-            		}
-            		else again=0;
+            	{
+              		printf("Invalid format, please re-enter:");
+                	again=1;
+            	}
+            	else again=0;
 	}
 	time3=subtract(&time1,&time2);
 	printf("Difference is:");
@@ -74,7 +74,7 @@ Time subtract(Time *first,Time *second)
     	}
     	else
     	{
-        		second->hours+=24;
+        	second->hours+=24;
 		result.hours=second->hours-first->hours;
    	 }
 
