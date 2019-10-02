@@ -1,8 +1,11 @@
 #include<stdio.h>
 #include<math.h>
+#include<time.h>
 
 int main()
 {
+	clock_t startTime,endTime;
+	startTime = clock();
 	int n,cnt=1,temp,sqt,flag=0;
 	double f;
 	printf("How many primes do you want to print out?");
@@ -22,5 +25,7 @@ int main()
 		flag =0;
 	}
 	printf("\n");
+	endTime = clock();
+	printf("Total time is:%lf",(double)(endTime - startTime) / CLOCKS_PER_SEC);	
 	return 0;	
 }
