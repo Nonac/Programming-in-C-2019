@@ -15,7 +15,7 @@ int main()
 void hailstone(int n)
 {
 	int i;
-	for(i=0;i<9;i++)
+	while(n!=1)
 	{
 		if(n%2==0)
 		{
