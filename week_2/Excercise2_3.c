@@ -6,8 +6,8 @@ int scode(int a);
 
 int main()
 {
-	printf("Please enter the source code:\n");
 	char c;
+	printf("Please enter the source code:\n");
 	while((c=getchar())!= EOF)
 	{
 		putchar(scode(c));	
@@ -25,4 +25,5 @@ int scode(int a)
 	{
 		return(UPPERCASE_SUM-a);
 	}
+	return 0;
 }

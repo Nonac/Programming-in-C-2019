@@ -10,9 +10,9 @@ int main()
 {
         char unvowel[21],vowel[5]={'a','e','i','o','u'};
 	char letter[26];
+	int i,j,cnt=1;
 	Createletter(letter);
         Createunvowel(unvowel,vowel);
-        int i,j,k,cnt=1;
         for(i=0;i<26;i++)
         {
                 for(j=0;j<5;j++)
@@ -24,7 +24,7 @@ int main()
 			}		
                 }
         }
-
+	return 0;
 }
 
 void Createletter(char *letter)

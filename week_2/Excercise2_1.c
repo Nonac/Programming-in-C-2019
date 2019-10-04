@@ -1,13 +1,12 @@
 #include<stdio.h>
 
-/*void Createvowel(char *vowel);*/
 void Createunvowel(char *unvowel,char *vowel);
 
 int main()
 {
 	char unvowel[21],vowel[5]={'a','e','i','o','u'};
-	Createunvowel(unvowel,vowel);	
 	int i,j,k,cnt=1;
+	Createunvowel(unvowel,vowel);	
 	for(i=0;i<21;i++)
 	{
 		for(j=0;j<5;j++)
@@ -18,7 +17,8 @@ int main()
 				cnt++;
 			}
 		}
-	}		
+	}
+	return 0;		
 		
 }
 
