@@ -18,10 +18,10 @@ int main()
 	{
 		res=Pi(cnt,res);
 		cnt++;
-		printf("%d ",cnt);
+		/*printf("%d ",cnt);*/
 	}
 
-	printf("\n\nThere are %d iterations to get p correctly approximated to 9 digits.\n",cnt);
+	printf("\n\nThere are %d iterations to get p correctly approximated to 9 digits.(%.10f)\n",cnt,res);
         endTime = clock();
         printf("Total time is:%.10f",(double)(endTime - startTime) / CLOCKS_PER_SEC);
         return 0;
@@ -35,7 +35,7 @@ int Check(double res)
 double  Pi(int cnt,double res)
 {
 	res = res + 4*pow((-1),(double)cnt)/(2*cnt+1);
-	printf("%.10f\n",res);
+	/*printf("%.10f\n",res);*/
 	return res;	
 }
 
