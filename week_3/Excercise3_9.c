@@ -1,44 +1,41 @@
 #include<stdio.h>
 #include<string.h>
-#define _LABIAL {'b','f','p','v'}
-#define _GUTTERALS_SIBILANTS {'c','g','j','k','q','s','x','z'}
-#define _DENTAL {'d','t'}
-#define _LONG_LIQUID {'l'}
-#define _NASAL {'m','n'}
-#define _SHORT_LIQUID {'r'}
-#define _SKIPPED {'a','e','h','i','o','u','w','y'}
+#include<stdlib.h>
 #define STORELEN 4
+#define _tolower(c) ((c)+'a'-'A')
+#define _toupper(c) ((c)+'A'-'a')
 
-int ReadIn(char *sp);
 void Soundex(char *sp,char *resp);
 
 int main()
 {
 	char res[STORELEN]={0},*resp=res;
 	char *sp=(char *)malloc(sizeof(char));
-	int len=ReadIn(sp);
-:
-	Soundex(sp,resp);	
-	printf("%s",resp);	
-}
-
-int ReadIn(char *sp)
-{
 	char str;
-	int len=0;
+	int i,len=0;
 	printf("Please enter the name:\n");
 	
-	while((str=getchar())!='\n')
+	while((str=getchar())!='\n' )
 	{
-		sp[str]=str;
-		sp=(char *)realloc(sq,(++len+1)*sizeof(char));	
+		sp[len]=str;
+		sp=(char *)realloc(sp,(++len+1)*sizeof(char));	
 	}
-	return len;
+	
+	Soundex(sp,resp);	
+	printf("%s",resp);
 }
 
 void Soundex(char *sp,char *resp)
 {
 	int k=0,i=1,j=1,splen=strlen(sp);
+	char _LABIAL[]={'b','f','p','v'};
+	char _GUTTERALS_SIBILANTS[]={'c','g','j','k','q','s','x','z'};
+	char _DENTAL[]={'d','t'};
+	char _LONG_LIQUID[]={'l'};
+	char _NASAL[]={'m','n'};
+	char _SHORT_LIQUID[]={'r'};
+	char _SKIPPED[]={'a','e','h','i','o','u','w','y'};
+
 	resp[0]=sp[0];
 	
 	while((i<4)&&(j<splen))
@@ -94,7 +91,7 @@ void Soundex(char *sp,char *resp)
 		k=0;
 		while(k<(sizeof(_SHORT_LIQUID)/sizeof(char)))
 		{
-			if(sp[j]==_SPORT_LIQUID[k]&&resp[i-1]!='6') 
+			if(sp[j]==_SHORT_LIQUID[k]&&resp[i-1]!='6') 
 			{
 				resp[i++]='6';
 				j++;
