@@ -17,13 +17,8 @@ int main()
 
 int scode(int a)
 {
-	if(a<='z' && a>='a')
-	{
-		return (LOWERCASE_SUM-a);
-	}
-	if(a<='Z' && a>='A')
-	{
-		return(UPPERCASE_SUM-a);
-	}
+	if(a<='z' && a>='a') return (LOWERCASE_SUM-a);
+	else if(a<='Z' && a>='A') return(UPPERCASE_SUM-a);
+	else return a;
 	return 0;
 }

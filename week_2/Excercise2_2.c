@@ -13,17 +13,29 @@ int main()
 	int i,j,cnt=1;
 	Createletter(letter);
         Createunvowel(unvowel,vowel);
-        for(i=0;i<26;i++)
+        for(i=0;i<21;i++)
         {
                 for(j=0;j<5;j++)
                 {
-			if(Isprime(Sub(letter[i])*2+Sub(vowel[j]))&&(letter[i]!=vowel[j]))
+			if(Isprime(Sub(unvowel[i])*2+Sub(vowel[j])))
 			{
-				printf("%d %c%c%c\n",cnt,letter[i],vowel[j],letter[i]);
+				printf("%d %c%c%c\n",cnt,unvowel[i],vowel[j],unvowel[i]);
 				cnt++;
 			}		
                 }
         }
+	for(i=0;i<21;i++)
+        {
+                for(j=0;j<5;j++)
+                {
+			if(Isprime(Sub(unvowel[i])+Sub(vowel[j]*2)))
+			{
+				printf("%d %c%c%c\n",cnt,vowel[j],unvowel[i],vowel[j]);
+				cnt++;
+			}		
+                }
+        }
+	
 	return 0;
 }
 
