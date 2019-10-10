@@ -40,7 +40,7 @@ void Soundex(char *sp,char *resp,int len)
     	char _NASAL[]={'m','n','\0'};
     	char _SHORT_LIQUID[]={'r','\0'};
     	char _SKIPPED[]={'a','e','i','o','u','y','\0'};
-    	char _SKIPPED_SPECIAL[]={'h','w'};
+    	char _SKIPPED_SPECIAL[]={'h','w','\0'};
 
     	first=sp[0];
 

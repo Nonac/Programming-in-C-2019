@@ -52,7 +52,7 @@ int main()
         scanf("%d",&rows);
     }*/
 
-    printf("Which mode do you want to create first line?\n1:Total Random\n2:Read on screen\n3:Read in files\n4:A certain switch on");
+    printf("Which mode do you want to create first line?\n1:Total Random\n2:Read on screen\n3:Read in files\n4:A certain switch on\n");
     scanf("%d",&firstline);
     /*while((firstline!=1)||(firstline!=2)||(firstline!=3))
     {
