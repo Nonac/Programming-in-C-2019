@@ -1,5 +1,12 @@
 #include<stdio.h>
 #include<string.h>
+#define I 1
+#define V 5
+#define X 10
+#define L 50
+#define C 100
+#define D 500
+#define M 1000
 
 int romanToArabic(char *roman );
 int main(int argc, char **argv)
@@ -23,21 +30,21 @@ int romanToArabic(char *roman) {
 	{
 		switch (roman[i])
 		{
-			case 'V':res += 5; break;
-			case 'L':res += 50; break;
-			case 'D':res += 500; break;
-			case 'M':res += 1000; break;
+			case 'V':res += V; break;
+			case 'L':res += L; break;
+			case 'D':res += D; break;
+			case 'M':res += M; break;
 			case 'I':
-				if ((roman[i + 1] == 'V') || roman[i + 1] == 'X') res -= 1;
-				else res += 1;
+				if ((roman[i + 1] == 'V') || roman[i + 1] == 'X') res -= I;
+				else res += I;
 				break;
 			case 'X':
-				if ((roman[i + 1] == 'L') || (roman[i + 1] == 'C')) res -= 10;
-				else res += 10;
+				if ((roman[i + 1] == 'L') || (roman[i + 1] == 'C')) res -= X;
+				else res += X;
 				break;
 			case 'C':
-				if ((roman[i + 1] == 'D') || (roman[i + 1] == 'M')) res -= 100;
-				else res += 100;
+				if ((roman[i + 1] == 'D') || (roman[i + 1] == 'M')) res -= C;
+				else res += C;
 				break;
 		}
 	}
