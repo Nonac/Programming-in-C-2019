@@ -23,6 +23,8 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+/*Only IV IX XL XC CD CM represant a special subtraction.*/
+
 int romanToArabic(char *roman) {
 	int i,res = 0;
 	int n = strlen(roman);
