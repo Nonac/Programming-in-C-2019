@@ -23,8 +23,9 @@ int main()
 {
     Node *p;
     char *s;
+    int i;
     printf("Enter the name:\n");
-    if(scanf("%s",s)!=1) exit(0);
+    if(scanf("%s",s)!=1) printf("%d",1);
 
     p=create(s);
     p=cheakWandH(p);
