@@ -133,9 +133,9 @@ int nextelem(int **array,int arrayx,int arrayy)
 int findhead(int **array,int arrayx,int arrayy)
 {
     int i,j,cnt=0;
-    for(i=arrayx-1;i<arrayx+1;i++)
+    for(i=arrayx-1;i<arrayx+2;i++)
     {
-        for (j =arrayy-1;j<arrayy+1; j++)
+        for (j =arrayy-1;j<arrayy+2; j++)
         {
             if (!(i<0 || j<0 || i>=LENGTH || j>=LENGTH || (i==arrayx && j==arrayy)))
             {
