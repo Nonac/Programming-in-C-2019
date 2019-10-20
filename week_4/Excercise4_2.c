@@ -1,4 +1,3 @@
-#include<stdio.h>
 #include "neillncurses.h"
 #include<stdio.h>
 #include<stdlib.h>
@@ -10,7 +9,6 @@
 #define HEADS "H"
 #define TAILS "t"
 #define COPPERS "c"
-#define GENERATION 1000
 #define LINEBREAKLENTH 8
 
 char **create();
