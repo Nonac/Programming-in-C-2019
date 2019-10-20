@@ -70,12 +70,8 @@ char **readin(char **array,char *argv)
     	fp=fopen(argv,"r");
     	for(arrayx=0;arrayx<LENGTH;arrayx++)
     	{
-        		fgets(temp,LENGTH+2,fp);
+		fgets(temp,LENGTH+2,fp);
 		memcpy(array[arrayx],temp,LENGTH);
-        		/*for(arrayy=0;arrayy<LENGTH;arrayy++)
-        		{
-            			*(*(array+arrayx)+arrayy)=temp[arrayy];
-        		}*/
     	}
     	fclose(fp);
     	return array;
