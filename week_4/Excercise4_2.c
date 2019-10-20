@@ -22,13 +22,13 @@ char findhead(char **array,int arrayx,int arrayy);
 
 int main(int argc,char **argv)
 {
-  	/* Array we'll display */
+  	
  	char **array=create(),**next=create();
 	NCURS_Simplewin sw;
     	if( argc==2 )
     	{
-        		array=readin(array,argv[1]);
-        		Neill_NCURS_Init(&sw);
+		array=readin(array,argv[1]);
+		Neill_NCURS_Init(&sw);
 		Neill_NCURS_CharStyle(&sw, HEADS, COLOR_BLUE, COLOR_BLUE, A_NORMAL);
 		Neill_NCURS_CharStyle(&sw, TAILS, COLOR_RED, COLOR_RED, A_NORMAL);
 		Neill_NCURS_CharStyle(&sw, COPPERS, COLOR_YELLOW, COLOR_YELLOW, A_NORMAL);				
@@ -36,9 +36,7 @@ int main(int argc,char **argv)
 		do{
 			next=nextarray(array,next);
      			Neill_NCURS_PrintArray(&next[0][0], LENGTH+LINEBREAKLENTH, LENGTH, &sw);
-     			/*  Delay in 1/1000s of a second */
      			Neill_NCURS_Delay(1000.0);
-     			/* Test for mouse click, or ESC key */
      			Neill_NCURS_Events(&sw);
 			array=change(array,next);
   		}while(!sw.finished);
