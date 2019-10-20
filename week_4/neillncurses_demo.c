@@ -30,7 +30,7 @@ int main(void)
   Neill_NCURS_Init(&sw);
   /* For the character 'H', 'E' etc. use red foreground colour, black background,
      and the alternative character set */
-  Neill_NCURS_CharStyle(&sw, "HELOWRD", COLOR_RED, COLOR_BLACK, A_NORMAL);
+  Neill_NCURS_CharStyle(&sw, "HELOWRD", COLOR_RED, COLOR_RED, A_NORMAL);
   /* For the characters 'j', 'k', 'l' etc. use green foreground colour, black background,
      in bold with the alternative character set */
   Neill_NCURS_CharStyle(&sw, "jklmqxf", COLOR_GREEN, COLOR_BLACK, A_BOLD | A_ALTCHARSET);
