@@ -1,6 +1,7 @@
 #include "neillncurses.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #define LENGTH 40
 #define EMPTY ' '
 #define HEAD 'H'
@@ -9,7 +10,7 @@
 #define HEADS "H"
 #define TAILS "t"
 #define COPPERS "c"
-#define LINEBREAKLENTH 8
+#define LINEBREAKLENTH 2
 
 char **create();
 char **readin(char **array,char *argv);
@@ -22,6 +23,8 @@ int main(int argc,char **argv)
 {
   	
  	char **array=create(),**next=create();
+	char arrayregular[LENGTH][LENGTH];
+	int i,j;
 	NCURS_Simplewin sw;
     	if( argc==2 )
     	{
@@ -33,7 +36,14 @@ int main(int argc,char **argv)
 		
 		do{
 			next=nextarray(array,next);
-     			Neill_NCURS_PrintArray(&next[0][0], LENGTH+LINEBREAKLENTH, LENGTH, &sw);
+			for(i=0;i<LENGTH;i++)
+			{
+				for(j=0;j<LENGTH;j++)
+				{
+					arrayregular[i][j]=next[i][j];
+				}
+			}
+     			Neill_NCURS_PrintArray(&arrayregular[0][0], LENGTH, LENGTH, &sw);
      			Neill_NCURS_Delay(1000.0);
      			Neill_NCURS_Events(&sw);
 			array=change(array,next);
@@ -52,10 +62,10 @@ int main(int argc,char **argv)
 char **create()
 {
     	int i;
-    	char **array=(char**)malloc(sizeof(char*)*LENGTH);
+    	char **array=(char**)malloc(sizeof(char*)*(LENGTH));
     	for(i=0;i<LENGTH;i++)
     	{
-        		*(array+i)=(char*)malloc(sizeof(char)*LENGTH);
+        		*(array+i)=(char*)malloc(sizeof(char)*(LENGTH));
     	}
     	return array;
 }
@@ -64,11 +74,11 @@ char **readin(char **array,char *argv)
 {
     	FILE *fp;
     	int arrayx;
-    	char temp[LENGTH+2];
+    	char temp[LENGTH];
     	fp=fopen(argv,"r");
     	for(arrayx=0;arrayx<LENGTH;arrayx++)
     	{
-		fgets(temp,LENGTH+2,fp);
+		fgets(temp,LENGTH+LINEBREAKLENTH,fp);
 		memcpy(array[arrayx],temp,LENGTH);
     	}
     	fclose(fp);
