@@ -8,6 +8,16 @@
 #define GENERATION 1000
 #define LINEBREAKLENTH 2
 
+/*
+*We could solve the problem by  following steps:
+*1.create two 2-D array:current and next.
+*2.read in from wireworld seed file.
+*3.generate a next array from current array.
+*4.print next array to a out file.
+*5.replace current from next
+*6.loop from 3 to 5 steps 1000 times.
+*/
+
 int **create();
 int **readin(int **array,char *argv);
 int **nextarray(int **array,int **next);
@@ -40,6 +50,7 @@ int main(int argc,char **argv)
     	return 0;
 }
 
+/*write a function to create 2-D array by dynamic array*/
 int **create()
 {
     	int i;
@@ -51,6 +62,7 @@ int **create()
     	return array;
 }
 
+/*read in to current from seed file.*/
 int **readin(int **array,char *argv)
 {
     	FILE *fp;
@@ -59,6 +71,10 @@ int **readin(int **array,char *argv)
     	fp=fopen(argv,"r");
     	for(arrayx=0;arrayx<LENGTH;arrayx++)
     	{
+/*function fgets get a number n,but read in n-1 chars.
+And every rows have both '\n' and '\0' at the end.
+So we have to define a 2 chars break(LINEBREAKLIENTH)in fgets. 
+ */
         		fgets(temp,LENGTH+LINEBREAKLENTH,fp);
         		for(arrayy=0;arrayy<LENGTH;arrayy++)
         		{
@@ -69,14 +85,15 @@ int **readin(int **array,char *argv)
     	return array;
 }
 
+/*print out to file*/
 void printout(int **next,FILE *ofp)
 {
-    	int nextx,nexty;
+    	int nextx,/*find out how many Head arround current element.*/nexty;
     	char elem;
     	for(nextx=0;nextx<LENGTH;nextx++)
     	{
         		for(nexty=0;nexty<LENGTH;nexty++) 
-		{
+			{
             			elem=*(*(next+nextx)+nexty);
             			fprintf(ofp,"%c",elem);
         		}
@@ -84,6 +101,7 @@ void printout(int **next,FILE *ofp)
     	}
 }
 
+/*generate next array by nextelem rule.*/
 int **nextarray(int **array,int **next)
 {
     	int arrayx,arrayy;
@@ -97,6 +115,7 @@ int **nextarray(int **array,int **next)
     	return next;
 }
 
+/*replace current from next array*/
 int **change(int **array,int **next)
 {
     	int arrayx,arrayy;
@@ -110,6 +129,7 @@ int **change(int **array,int **next)
     	return array;
 }
 
+/*use given rule to generate next element*/
 int nextelem(int **array,int arrayx,int arrayy)
 {
     	switch (*(*(array+arrayx)+arrayy)) {
@@ -128,10 +148,12 @@ int nextelem(int **array,int arrayx,int arrayy)
                 			return COPPER;
             			}
         		default:
-            			return -1;
+            			printf("Input invalid. Please change the files.\n");
+				exit(EXIT_FAILURE);
     	}
 }
 
+/*find out how many Head arround current element.*/
 int findhead(int **array,int arrayx,int arrayy)
 {
     	int i,j,cnt=0;
@@ -141,10 +163,17 @@ int findhead(int **array,int arrayx,int arrayy)
         		{
             			if (!(i<0 || j<0 || i>=LENGTH || j>=LENGTH || (i==arrayx && j==arrayy)))
             			{
-                			if(*(*(array+i)+j)==HEAD) cnt++;
+                			if(*(*(array+i)+j)==HEAD) 
+					{
+						cnt++;
+					}
             			}
         		}
     	}
-    	if((cnt==1)||(cnt==2)) return 1;
-    	else return 0;
+    	if((cnt==1)||(cnt==2)) 
+	{
+		return 1;
+    	}else{
+		return 0;
+	}
 }
