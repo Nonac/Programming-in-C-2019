@@ -82,7 +82,7 @@ char **readin(char **array,char *argv)
 {
     	FILE *fp;
     	int arrayx;
-    	char temp[LENGTH];
+    	char temp[LENGTH+LINEBREAKLENTH];
     	fp=fopen(argv,"r");
     	for(arrayx=0;arrayx<LENGTH;arrayx++)
     	{
@@ -91,9 +91,11 @@ char **readin(char **array,char *argv)
 *And every rows have both '\n' and '\0' at the end.
 *So we have to define a 2 chars break(LINEBREAKLIENTH)in fgets. 
  */
-		fgets(temp,LENGTH+LINEBREAKLENTH,fp);
-		memcpy(array[arrayx],temp,LENGTH);
-    	}
+		if(fgets(temp,LENGTH+LINEBREAKLENTH,fp)!=NULL)
+		{
+			memcpy(array[arrayx],temp,LENGTH);
+    		}
+	}
     	fclose(fp);
     	return array;
 }
