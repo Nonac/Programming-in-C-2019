@@ -22,6 +22,7 @@ char **nextarray(char **array,char **next);
 char **change(char **array,char **next);
 char nextelem(char **array,int arrayx,int arrayy);
 char findhead(char **array,int arrayx,int arrayy);
+void friendError();
 
 int main(int argc,char **argv)
 {
@@ -131,10 +132,6 @@ char **change(char **array,char **next)
 /*use given rule to generate next element*/
 char nextelem(char **array,int arrayx,int arrayy)
 {
-	NCURS_Simplewin sw;
-	char a[LENGTH][LENGTH];
-  	int i,j;
-
     	switch (*(*(array+arrayx)+arrayy)) {
         		case EMPTY:
             			return EMPTY;
@@ -143,31 +140,10 @@ char nextelem(char **array,int arrayx,int arrayy)
         		case TAIL:
             			return COPPER;
         		case COPPER:
-            			if (findhead(array,arrayx,arrayy))
-            			{
-                			return HEAD;
-            			}else
-            			{
-                			return COPPER;
-            			}
-        			default:
-				/*Friendly Errors graphy interface.*/
-					Neill_NCURS_Init(&sw);
-					  /* fill the array with spaces */
-  					for(j=0; j<LENGTH; j++){
-     						for(i=0; i<LENGTH; i++){
-        						a[j][i] = ' ';
-     						}
-  					}
-					do{
-
-						memcpy(a[LENGTH/2], "Input invalid,please change the files.\n", LENGTH);
-						Neill_NCURS_PrintArray(&a[0][0], LENGTH, LENGTH, &sw);
-						Neill_NCURS_Delay(1000.0);
-     						Neill_NCURS_Events(&sw);
-					}while(!sw.finished);
-					atexit(Neill_NCURS_Done);         
-					exit(EXIT_FAILURE);
+				return (findhead(array,arrayx,arrayy))? HEAD:COPPER;
+        		default:
+				friendError();
+				return -1;
     	}
 }
 
@@ -188,10 +164,29 @@ char findhead(char **array,int arrayx,int arrayy)
             			}
         		}
     	}
-    	if((cnt==1)||(cnt==2)) 
-	{
-		return 1;
-    	}else{
-		return 0;
-	}
+	return ((cnt==1)||(cnt==2))? 1:0;
+}
+
+/*Friendly Error graphic interface.*/
+void friendError()
+{
+	NCURS_Simplewin sw;
+	char a[LENGTH][LENGTH];
+  	int i,j;
+	Neill_NCURS_Init(&sw);
+	/* fill the array with spaces */
+  	for(j=0; j<LENGTH; j++){
+     		for(i=0; i<LENGTH; i++){
+        		a[j][i] = ' ';
+     		}
+  		}
+	do{
+
+		memcpy(a[LENGTH/2], "Input invalid,please change the files.\n", LENGTH);
+		Neill_NCURS_PrintArray(&a[0][0], LENGTH, LENGTH, &sw);
+		Neill_NCURS_Delay(1000.0);
+     		Neill_NCURS_Events(&sw);
+	}while(!sw.finished);
+	atexit(Neill_NCURS_Done);         
+	exit(EXIT_FAILURE);
 }
