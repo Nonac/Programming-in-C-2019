@@ -182,7 +182,7 @@ void friendError()
   		}
 	do{
 
-		memcpy(a[LENGTH/2], "Input invalid,please change the files.\n", LENGTH);
+		memcpy(a[LENGTH/2], "Input invalid, Please change the files.\n", LENGTH);
 		Neill_NCURS_PrintArray(&a[0][0], LENGTH, LENGTH, &sw);
 		Neill_NCURS_Delay(1000.0);
      		Neill_NCURS_Events(&sw);
