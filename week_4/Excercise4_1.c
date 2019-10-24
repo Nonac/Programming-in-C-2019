@@ -25,7 +25,7 @@ char **nextarray(char **array,char **next);
 char **change(char **array,char **next);
 char nextelem(char **array,int arrayx,int arrayy);
 int findhead(char **array,int arrayx,int arrayy);
-void printout(char **next,FILE *ofp);
+void printout(char **next,FILE *ofp,int i);
 
 int main(int argc,char **argv)
 {
@@ -42,7 +42,7 @@ int main(int argc,char **argv)
 		for (i = 0; i < GENERATION; ++i) 
 		{
 			next=nextarray(array,next);
-			printout(next,ofp);
+			printout(next,ofp,i);
 			array=change(array,next);
 		}
 		fclose(ofp);
@@ -99,16 +99,22 @@ So we have to define a 2 chars break(LINEBREAKLIENTH)in fgets.
 }
 
 /*print out to file*/
-void printout(char **next,FILE *ofp)
+void printout(char **next,FILE *ofp, int i)
 {
     	int nextx,/*find out how many Head arround current element.*/nexty;
     	char elem;
+	printf("It is No.%d print.\n",i+1);
     	for(nextx=0;nextx<LENGTH;nextx++)
-    	{
+    	{	
         		for(nexty=0;nexty<LENGTH;nexty++) 
-			{
+		{
             			elem=*(*(next+nextx)+nexty);
             			fprintf(ofp,"%c",elem);
+			printf("%c",elem);
+			if(nexty==LENGTH-1)
+			{
+				printf("\n");
+			}
         		}
         		fprintf(ofp,"\n");
     	}
