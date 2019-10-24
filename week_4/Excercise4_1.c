@@ -34,22 +34,22 @@ int main(int argc,char **argv)
     	FILE *ofp;
     	if( argc==2 )
     	{
-        		ofp=fopen("wireworld_out.txt","wt");
-
+		ofp=fopen("wireworld_out.txt","wt");
+		
 		assert(ofp);		
 
         		array=readin(array,argv[1]);
         		for (i = 0; i < GENERATION; ++i) 
 		{
-            			next=nextarray(array,next);
-            			printout(next,ofp);
-            			array=change(array,next);
-        		}
+			next=nextarray(array,next);
+			printout(next,ofp);
+			array=change(array,next);
+		}
         		fclose(ofp);
     	}
     	else
     	{
-        		printf("ERROR: Incorrect usage.\n");
+		printf("ERROR: Incorrect usage.\n");
     	}
     	return 0;
 }
