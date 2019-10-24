@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<assert.h>
 #define LENGTH 40
 #define EMPTY ' '
 #define HEAD 'H'
@@ -22,7 +23,7 @@ char **nextarray(char **array,char **next);
 char **change(char **array,char **next);
 char nextelem(char **array,int arrayx,int arrayy);
 char findhead(char **array,int arrayx,int arrayy);
-void friendError();
+void friendlyError();
 
 int main(int argc,char **argv)
 {
@@ -34,6 +35,9 @@ int main(int argc,char **argv)
     	if( argc==2 )
     	{
 		array=readin(array,argv[1]);
+
+		assert(array);
+
 		Neill_NCURS_Init(&sw);
 /*if set the char and the blackground the same color,we will get a square.*/
 		Neill_NCURS_CharStyle(&sw, HEADS, COLOR_BLUE, COLOR_BLUE, A_NORMAL);
@@ -75,6 +79,9 @@ char **create()
     	{
         		*(array+i)=(char*)malloc(sizeof(char)*(LENGTH));
     	}
+
+	assert(array);
+
     	return array;
 }
 
@@ -85,20 +92,23 @@ char **readin(char **array,char *argv)
     	int arrayx;
     	char temp[LENGTH+LINEBREAKLENTH];
     	fp=fopen(argv,"r");
-    	for(arrayx=0;arrayx<LENGTH;arrayx++)
-    	{
 /*
 *function fgets get a number n,but read in n-1 chars.
 *And every rows have both '\n' and '\0' at the end.
 *So we have to define a 2 chars break(LINEBREAKLIENTH)in fgets. 
  */
+    	for(arrayx=0;arrayx<LENGTH;arrayx++)
+    	{
 		if(fgets(temp,LENGTH+LINEBREAKLENTH,fp)!=NULL)
 		{
 			memcpy(array[arrayx],temp,LENGTH);
     		}
 	}
     	fclose(fp);
-    	return array;
+
+	assert(array);
+    	
+	return array;
 }
 
 /*generate next array by nextelem rule.*/
@@ -112,6 +122,9 @@ char **nextarray(char **array,char **next)
             			*(*(next+arrayx)+arrayy)=nextelem(array,arrayx,arrayy);
         		}
     	}
+
+	assert(next);
+
     	return next;
 }
 
@@ -132,6 +145,10 @@ char **change(char **array,char **next)
 /*use given rule to generate next element*/
 char nextelem(char **array,int arrayx,int arrayy)
 {
+
+	assert(arrayx>=0&&arrayx<=LENGTH);
+	assert(arrayy>=0&&arrayy<=LENGTH);
+
     	switch (*(*(array+arrayx)+arrayy)) {
         		case EMPTY:
             			return EMPTY;
@@ -140,10 +157,10 @@ char nextelem(char **array,int arrayx,int arrayy)
         		case TAIL:
             			return COPPER;
         		case COPPER:
-				return (findhead(array,arrayx,arrayy))? HEAD:COPPER;
+			return (findhead(array,arrayx,arrayy))? HEAD:COPPER;
         		default:
-				friendError();
-				return -1;
+			friendlyError();
+			exit(EXIT_FAILURE);
     	}
 }
 
@@ -151,6 +168,10 @@ char nextelem(char **array,int arrayx,int arrayy)
 char findhead(char **array,int arrayx,int arrayy)
 {
     	int i,j,cnt=0;
+
+	assert(arrayx>=0&&arrayx<=LENGTH);
+	assert(arrayy>=0&&arrayy<=LENGTH);
+
     	for(i=arrayx-1;i<arrayx+2;i++)
     	{
         		for (j =arrayy-1;j<arrayy+2; j++)
@@ -164,25 +185,29 @@ char findhead(char **array,int arrayx,int arrayy)
             			}
         		}
     	}
+
+	assert(cnt>=0&&cnt<=8);
+
 	return ((cnt==1)||(cnt==2))? 1:0;
 }
 
 /*Friendly Error graphic interface.*/
-void friendError()
+void friendlyError()
 {
 	NCURS_Simplewin sw;
 	char a[LENGTH][LENGTH];
   	int i,j;
 	Neill_NCURS_Init(&sw);
 	/* fill the array with spaces */
-  	for(j=0; j<LENGTH; j++){
-     		for(i=0; i<LENGTH; i++){
+  	for(j=0; j<LENGTH; j++)
+	{
+     		for(i=0; i<LENGTH; i++)
+		{
         		a[j][i] = ' ';
      		}
-  		}
+  	}
 	do{
-
-		memcpy(a[LENGTH/2], "Input invalid, Please change the files.\n", LENGTH);
+		memcpy(a[LENGTH/2], "Input invalid. Please change the files.\n", LENGTH);
 		Neill_NCURS_PrintArray(&a[0][0], LENGTH, LENGTH, &sw);
 		Neill_NCURS_Delay(1000.0);
      		Neill_NCURS_Events(&sw);

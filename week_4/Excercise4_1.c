@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<assert.h>
 #define LENGTH 40
 #define EMPTY ' '
 #define HEAD 'H'
@@ -18,22 +19,25 @@
 *6.loop from 3 to 5 steps 1000 times.
 */
 
-int **create();
-int **readin(int **array,char *argv);
-int **nextarray(int **array,int **next);
-int **change(int **array,int **next);
-int nextelem(int **array,int arrayx,int arrayy);
-int findhead(int **array,int arrayx,int arrayy);
-void printout(int **next,FILE *ofp);
+char **create();
+char **readin(char **array,char *argv);
+char **nextarray(char **array,char **next);
+char **change(char **array,char **next);
+char nextelem(char **array,int arrayx,int arrayy);
+int findhead(char **array,int arrayx,int arrayy);
+void printout(char **next,FILE *ofp);
 
 int main(int argc,char **argv)
 {
-    	int **array=create(),**next=create();
+    	char **array=create(),**next=create();
     	int i;
     	FILE *ofp;
     	if( argc==2 )
     	{
         		ofp=fopen("wireworld_out.txt","wt");
+
+		assert(ofp);		
+
         		array=readin(array,argv[1]);
         		for (i = 0; i < GENERATION; ++i) 
 		{
@@ -51,31 +55,34 @@ int main(int argc,char **argv)
 }
 
 /*write a function to create 2-D array by dynamic array*/
-int **create()
+char **create()
 {
     	int i;
-    	int **array=(int**)malloc(sizeof(int*)*LENGTH);
+    	char **array=(char**)malloc(sizeof(char*)*LENGTH);
     	for(i=0;i<LENGTH;i++)
     	{
-        		*(array+i)=(int*)malloc(sizeof(int)*LENGTH);
+        		*(array+i)=(char*)malloc(sizeof(char)*LENGTH);
     	}
+	
+	assert(array);	
+
     	return array;
 }
 
 /*read in to current from seed file.*/
-int **readin(int **array,char *argv)
+char **readin(char **array,char *argv)
 {
     	FILE *fp;
     	int arrayx,arrayy;
     	char temp[LENGTH+LINEBREAKLENTH];
 	
-    	fp=fopen(argv,"r");
-    	for(arrayx=0;arrayx<LENGTH;arrayx++)
-    	{
 /*function fgets get a number n,but read in n-1 chars.
 And every rows have both '\n' and '\0' at the end.
 So we have to define a 2 chars break(LINEBREAKLIENTH)in fgets. 
  */
+	fp=fopen(argv,"r");
+    	for(arrayx=0;arrayx<LENGTH;arrayx++)
+    	{
         		if(fgets(temp,LENGTH+LINEBREAKLENTH,fp)!=NULL)
 		{
         			for(arrayy=0;arrayy<LENGTH;arrayy++)
@@ -85,11 +92,14 @@ So we have to define a 2 chars break(LINEBREAKLIENTH)in fgets.
 		}
     	}
     	fclose(fp);
+
+	assert(array);
+
     	return array;
 }
 
 /*print out to file*/
-void printout(int **next,FILE *ofp)
+void printout(char **next,FILE *ofp)
 {
     	int nextx,/*find out how many Head arround current element.*/nexty;
     	char elem;
@@ -105,7 +115,7 @@ void printout(int **next,FILE *ofp)
 }
 
 /*generate next array by nextelem rule.*/
-int **nextarray(int **array,int **next)
+char **nextarray(char **array,char **next)
 {
     	int arrayx,arrayy;
     	for(arrayx=0;arrayx<LENGTH;arrayx++)
@@ -115,11 +125,14 @@ int **nextarray(int **array,int **next)
             			*(*(next+arrayx)+arrayy)=nextelem(array,arrayx,arrayy);
         		}
     	}
+
+	assert(next);
+	
     	return next;
 }
 
 /*replace current from next array*/
-int **change(int **array,int **next)
+char **change(char **array,char **next)
 {
     	int arrayx,arrayy;
     	for(arrayx=0;arrayx<LENGTH;arrayx++)
@@ -133,8 +146,12 @@ int **change(int **array,int **next)
 }
 
 /*use given rule to generate next element*/
-int nextelem(int **array,int arrayx,int arrayy)
+char nextelem(char **array,int arrayx,int arrayy)
 {
+	
+	assert(arrayx>=0&&arrayx<=LENGTH);
+	assert(arrayy>=0&&arrayy<=LENGTH);
+
     	switch (*(*(array+arrayx)+arrayy)) {
         		case EMPTY:
             			return EMPTY;
@@ -143,23 +160,21 @@ int nextelem(int **array,int arrayx,int arrayy)
         		case TAIL:
             			return COPPER;
         		case COPPER:
-            			if (findhead(array,arrayx,arrayy))
-            			{
-                			return HEAD;
-            			}else
-            			{
-                			return COPPER;
-            			}
+            			return (findhead(array,arrayx,arrayy))? HEAD:COPPER;
         		default:
             			printf("Input invalid. Please change the files.\n");
-				exit(EXIT_FAILURE);
+			exit(EXIT_FAILURE);
     	}
 }
 
 /*find out how many Head arround current element.*/
-int findhead(int **array,int arrayx,int arrayy)
+int findhead(char **array,int arrayx,int arrayy)
 {
     	int i,j,cnt=0;
+
+	assert(arrayx>=0&&arrayx<=LENGTH);
+	assert(arrayy>=0&&arrayy<=LENGTH);
+
     	for(i=arrayx-1;i<arrayx+2;i++)
     	{
         		for (j =arrayy-1;j<arrayy+2; j++)
@@ -173,10 +188,8 @@ int findhead(int **array,int arrayx,int arrayy)
             			}
         		}
     	}
-    	if((cnt==1)||(cnt==2)) 
-	{
-		return 1;
-    	}else{
-		return 0;
-	}
+
+	assert(cnt>=0&&cnt<=8);
+
+	return ((cnt==1)||(cnt==2))? 1:0;
 }
