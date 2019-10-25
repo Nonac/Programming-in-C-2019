@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #define LONGESTWORD 45
+#define BUFFSIZE 1024
 
 /*Longest word in a major dictionary is Pneumonoultramicroscopicsilicovolcanoconiosis with 45 letters.*/
 
@@ -12,9 +13,13 @@ int main()
 {
 	char word[LONGESTWORD];
 	char temp;
-	FILE *fp;
+	FILE *fp,*fout;
 	int i;
 	fp=fopen("eng_370k_shuffle.txt","r");
+	fout=fopen("copydictory.txt","w");
+
+	copyfile(fp,fout);
+
 	do{
 		for(i=0;i<LONGESTWORD;i++)
 		{
@@ -65,5 +70,16 @@ void printword(char *word)
 
 void copyfile(FILE *fin, FILE *fout)
 {
+	char *buff=malloc(BUFFSIZE);		
+	int ret;
 	
+	do{
+		ret=fread(buff,1,BUFFSIZE,fin);
+		if(ret!=BUFFSIZE)
+		{
+			fwrite(buff,ret,1,fout);
+		}else{
+			fwrite(buff,BUFFSIZE,1,fout);
+		}
+	while(!(feof(fin)));
 }
