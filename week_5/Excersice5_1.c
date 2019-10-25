@@ -1,19 +1,33 @@
 #include<stdio.h>
 #include<string.h>
+#define LONGESTWORD 45
+
+/*Longest word in a major dictionary is Pneumonoultramicroscopicsilicovolcanoconiosis with 45 letters.*/
+
 int isAnagrams(char *target,char *dict);
-void printword(char *dict);
+void printword(char *word);
 
 int main(int argc,char **argv)
 {
-	char **dict
+	char word[LONGESTWORD];
+	char temp;
 	FILE *fp;
+	int i;
 	if(argc==2)
 	{
-		
-		if(isAnagrams(argv[1],dict))
+		fp=fopen("eng_370k_shuffle.txt","r");
+		do{
+		for(i=0;i<LONGESTWORD;i++)
 		{
-			printword(dict);
-		}				
+			word[i]=EOF;
+		}
+		
+		fscanf(fp,"%s",word);		
+		if(isAnagrams(argv[1],word))
+		{
+			printword(word);
+		}
+		}while(word[0]!=EOF);				
 	}
 	else
 	{
@@ -23,32 +37,33 @@ int main(int argc,char **argv)
 
 int isAnagrams(char *target, char *dict)
 {
-	int Alphabet[26]={0};
+	int i,Alphabet[26]={0};
 	if(target==NULL && dict==NULL) return 1;
-	if((strlen(target)!=strlen(diction))) return 0;
-	
+	if(((strlen(target))!=(strlen(dict)))) return 0;
+
 	for(i=0;i<strlen(target);i++)
 	{
 		Alphabet[target[i]-'a']++;
 		Alphabet[dict[i]-'a']--;
 	}
 
-	for(i=0;i<strlen(target);i++)
+	for(i=0;i<26;i++)
 	{
 		if(Alphabet[i]<0)
 		{
-			return ;
+			return 0;
 		}
 	}
-	return 1;	
+	return 1;
 }
 
 void printword(char *word)
 {
 	int i=0;
-	while(word[i]!=NULL)
+	while(word[i]!=EOF)
 	{
 		printf("%c",word[i]);
+		i++;
 	}
-	printf("\n");	
+	printf("\n");
 }
