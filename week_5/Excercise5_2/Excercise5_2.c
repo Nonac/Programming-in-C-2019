@@ -1,86 +1,76 @@
-#include<stdio.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#define ALPHABET 26
 #define LONGESTWORD 45
-#define BUFFSIZE 1024
 
-/*Longest word in a major dictionary is Pneumonoultramicroscopicsilicovolcanoconiosis with 45 letters.*/
+typedef struct Node{
+    unsigned long product;
+    char **anagrams;
+    struct Node *next;
+}Node;
 
-int isAnagrams(char *target,char *dict);
-void printword(char *word);
-void copyfile(FILE *fin, FILE *fout);
+int *createprime(int *prime);
+Node *create();
+void search(Node *p, unsigned long mumultiply,char *wordp);
 
 int main()
 {
-	char word[LONGESTWORD];
-	char temp;
-	FILE *fp,*fout;
-	int i;
-	fp=fopen("eng_370k_shuffle.txt","r");
-	fout=fopen("copydictory.txt","w");
+    int *prime=(int *)malloc(sizeof(int)*ALPHABET);
+    FILE *fp;
+    char word[LONGESTWORD];
+    int i;
+    unsigned long multiply=1;
+    Node *p;
 
-	copyfile(fp,fout);
-
-	do{
-		for(i=0;i<LONGESTWORD;i++)
-		{
-			word[i]=EOF;
-			fout[i]=EOF;
-		}
-		
-		fscanf(fp,"%s",word);		
-		if(isAnagrams(argv[1],word))
-		{
-			printword(word);
-		}
-		}while(word[0]!=EOF);				
+    char *wordp=word;
+    prime=createprime(prime);
+    p=create();
+    fp=fopen("eng_370k_shuffle.txt","r");
+    do{
+        for(i=0;i<LONGESTWORD;i++)
+        {
+            word[i]=EOF;
+        }
+        fscanf(fp,"%s",word);
+        for(i=0;word[i]!=EOF;i++)
+        {
+            multiply*=prime[word[i]-'a'];
+        }
+        search(p,multiply,wordp);
+    }while(word[0]!=EOF);
 }
 
-int isAnagrams(char *target, char *dict)
+Node *create()
 {
-	int i,Alphabet[26]={0};
-	if(target==NULL && dict==NULL) return 1;
-	if(((strlen(target))!=(strlen(dict)))) return 0;
-
-	for(i=0;i<strlen(target);i++)
-	{
-		Alphabet[target[i]-'a']++;
-		Alphabet[dict[i]-'a']--;
-	}
-
-	for(i=0;i<26;i++)
-	{
-		if(Alphabet[i]<0)
-		{
-			return 0;
-		}
-	}
-	return 1;
+    Node *head;
+    head=(Node *)malloc(sizeof(Node));
+    head->product=1;
+    head->anagrams=(char **)malloc(sizeof(char*));
+    head->next=NULL;
+    return head;
 }
 
-void printword(char *word)
+int *createprime(int *prime)
 {
-	int i=0;
-	while(word[i]!=EOF)
-	{
-		printf("%c",word[i]);
-		i++;
-	}
-	printf("\n");
+    int temp,cnt=0,flag=0,sqt;
+    for (temp=2;cnt<ALPHABET;temp++)
+    {
+        for(sqt=2;((sqt<temp)&&(flag==0));sqt++)
+        {
+            if(temp%sqt==0) flag=1;
+        }
+        if((sqt>=temp)&&(flag==0))
+        {
+            *(prime+cnt)=temp;
+            cnt++;
+        }
+        flag =0;
+    }
+    return prime;
 }
 
-
-void copyfile(FILE *fin, FILE *fout)
+void search(Node *p, unsigned long mumultiply,char *wordp)
 {
-	char *buff=malloc(BUFFSIZE);		
-	int ret;
-	
-	do{
-		ret=fread(buff,1,BUFFSIZE,fin);
-		if(ret!=BUFFSIZE)
-		{
-			fwrite(buff,ret,1,fout);
-		}else{
-			fwrite(buff,BUFFSIZE,1,fout);
-		}
-	while(!(feof(fin)));
+
 }
+
