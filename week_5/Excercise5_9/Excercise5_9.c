@@ -25,13 +25,13 @@ int main()
     {
         changevalue(head,temp);
         test=countsum(head);
-        if(min<test)
+        if(min>=test)
         {
 	    for(j=0;j<rand()%20;j++)
             {
 		temp=temp->next;
             }
-	   /* head=head->next;*/
+	    head=head->next;
             min=test;
         }else
         {
