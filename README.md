@@ -4,13 +4,14 @@
 
 +unfinish:
 
- -5_2 debug
+ -5_2 debug 
+ -5_4 forth question(Dull)
 ---
 +undo:
 
- -5_4 5_5 5_6 5_7 5_7 5_10
+ -5_5 5_6 5_7 5_7 5_10
 ---
 +force on:
 
- -5_4
+ -5_5
 ---
