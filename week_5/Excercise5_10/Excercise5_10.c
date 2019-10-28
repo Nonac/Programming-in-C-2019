@@ -9,12 +9,12 @@ typedef struct coordinate{
 
 char **readin(char **maze,FILE *fp,int width, int height);
 char **calmaze(char **maze,int x,int y,int width, int height);
-int isValue(char **maze,int x,int y);
+int isValue(char **maze,int x,int y,int width,int height);
 
 int main(int argc, char **argv)
 {
     FILE *fp;
-    int i,width,height;
+    int i,j,width,height;
     char **maze;
     coordinate man;
     if(argc==2)
@@ -36,6 +36,14 @@ int main(int argc, char **argv)
             man.x=0;
             man.y=1;
             maze=calmaze(maze,man.x,man.y,width,height);
+
+            for(i=0;i<width;i++)
+            {
+                for (j = 0;  j<height ; j++) {
+                    printf("%c",*(*(maze+i)+j));
+                }
+                printf("\n");
+            }
         }
     } else{
         printf("Error.\n");
@@ -62,53 +70,39 @@ char **readin(char **maze,FILE *fp,int width, int height)
 
 char **calmaze(char **maze,int x,int y,int width, int height)
 {
+    int i,j;
     if(x==width||y==height)
     {
         return maze;
     } else{
-        switch (isValue(maze,x,y))
+        for(i=x-1;i<x+2;i++)
         {
-            case 1:
-                *(*(maze+x)+y)='.';
-                maze=calmaze(maze,x-1,y,width,height);
-                break;
-            case 2:
-                *(*(maze+x)+y)='.';
-                maze=calmaze(maze,x+1,y,width,height);
-                break;
-            case 3:
-                *(*(maze+x)+y)='.';
-                maze=calmaze(maze,x,y-1,width,height);
-                break;
-            case 4:
-                *(*(maze+x)+y)='.';
-                maze=calmaze(maze,x,y+1,width,height);
-                break;
-            default:
-                *(*(maze+x)+y)='X';
-                maze=calmaze(maze,x,y,width,height);
-                break;
+            for(j=y-1;j<y+2;j++)
+            {
+                if((i==x||j==y)&&((i!=x)&&(j!=y)))
+                {
+                    if (isValue(maze,i,j,width,height))
+                    {
+                        *(*(maze+x)+y)='.';
+                        maze=calmaze(maze,i,j,width,height);
+                        *(*(maze+x)+y)=' ';
+                    }
+                }
+            }
         }
     }
+    return maze;
 }
 
-int isValue(char **maze,int x,int y)
+int isValue(char **maze,int x,int y,int width,int height)
 {
-    if(*(*(maze+x-1)+y)==' ')
+    if(x==width||y==height)
     {
         return 1;
     }
-    if(*(*(maze+x+1)+y)==' ')
+    if(*(*(maze+x)+y)==' ')
     {
-        return 2;
-    }
-    if(*(*(maze+x)+y-1)==' ')
-    {
-        return 3;
-    }
-    if(*(*(maze+x-1)+y+1)==' ')
-    {
-        return 4;
+        return 1;
     }
     return 0;
 }
