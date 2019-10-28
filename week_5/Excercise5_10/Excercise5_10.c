@@ -80,6 +80,7 @@ char **calmaze(char **maze,int x,int y,int width, int height)
                 		{
                     			if (isValue(maze,i,j,width,height))
                     			{
+						
                         			*(*(maze+i)+j)='.';
                         			maze=calmaze(maze,i,j,width,height);
                     			}
@@ -92,7 +93,8 @@ char **calmaze(char **maze,int x,int y,int width, int height)
 
 int isValue(char **maze,int x,int y,int width,int height)
 {
-    	if(y==width||x==height)
+	int i,j,cnt=0;	
+	if(y==width||x==height)
     	{
         	return 1;
     	}
@@ -100,5 +102,5 @@ int isValue(char **maze,int x,int y,int width,int height)
     	{
         	return 1;
     	}
-    	return 0;
+        return 0;
 }

@@ -20,8 +20,8 @@ int main(int argc,char **argv)
     if( argc==2 ) {
         prime = createprime(prime);
         multiply=countmul(argv[1],prime);
-        fphead = fopen("34words.txt", "r");
-        fpend = fopen("34words.txt", "r");
+        fphead = fopen("eng_370k_shuffle.txt", "r");
+        fpend = fopen("eng_370k_shuffle.txt", "r");
         
         do
         {
