@@ -5,19 +5,22 @@
 int compare(char *a,char *b);
 int countdiff(char *a,char *b);
 char **wordladders(FILE *fp,char *start,char *end,char **res,int diff);
+int notin(char *temp, char **res);
 
 int main()
 {
-    FILE *fp=fopen("D:\\Coding Practise\\Clion_practise\\34words.txt","r");
+    FILE *fp=fopen("/home/ff19085/CLionProjects/clion/test.txt","r");
     char *start="wild",*end="tame";
-    int i,diff=countdiff(start,end);
+    int i,j,flag,diff=countdiff(start,end);
     char **res=(char **)malloc(sizeof(char *)*diff);
     for(i=0;i<diff;i++)
     {
         *(res+i)=(char *)malloc(sizeof(char)*strlen(start));
     }
-
+    *(res)=start;
+    *(res+1)=end;
     res=wordladders(fp,start,end,res,diff);
+
     return 0;
 }
 
@@ -31,20 +34,22 @@ int countdiff(char *a,char *b)
             diff++;
         }
     }
+
     return diff;
 }
 
 char **wordladders(FILE *fp,char *start,char *end,char **res,int diff)
 {
     char *temp=(char *)malloc(sizeof(char)*strlen(start));
+    int i,j;
+    fseek(fp,0,SEEK_SET);
     if(compare(start,end))
     {
-        *(res)=start;
-        *(res+1)=end;
-        for(int i=0;i<5;i++)
+
+        for(i=0;i<5;i++)
         {
-            for (int j = 0; j <4 ; ++j) {
-                printf("%c",*(*(res+j)+i));
+            for (j = 0; j <4 ; ++j) {
+                printf("%c",*(*(res+i)+j));
             }
             printf("\n");
         }
@@ -53,12 +58,13 @@ char **wordladders(FILE *fp,char *start,char *end,char **res,int diff)
     do
     {
         fscanf(fp, "%s", temp);
-        if(compare(start,temp))
+        if(compare(start,temp) && notin(temp,res))
         {
             *(res+diff-1)=temp;
-            res=wordladders(fp,temp,end,res,diff-1);
+            wordladders(fp,temp,end,res,diff-1);
         }
     }while(!feof(fp));
+
 }
 
 int compare(char *a,char *b)
@@ -77,6 +83,19 @@ int compare(char *a,char *b)
             {
                 return 0;
             }
+        }
+    }
+    return (diff==0)?0:1;
+}
+
+int notin(char *temp, char **res)
+{
+    int i;
+    for(i=0;i<strlen(res);i++)
+    {
+        if(!strcmp(*(res+i),temp))
+        {
+            return 0;
         }
     }
     return 1;
