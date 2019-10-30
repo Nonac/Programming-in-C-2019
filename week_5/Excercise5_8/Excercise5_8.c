@@ -2,26 +2,41 @@
 #include <string.h>
 #include <stdlib.h>
 
+typedef struct node
+{
+    char *word;
+    struct node *next;
+}Node;
+
 int compare(char *a,char *b);
 int countdiff(char *a,char *b);
-char **wordladders(FILE *fp,char *start,char *end,char **res,int diff);
-int notin(char *temp, char **res);
+void wordladders(FILE *fp,char *start,char *end,Node *head,int diff,int lenth);
+int notin(char *temp, Node *head,int lenth);
+Node *create(char *start, char *end);
 
 int main()
 {
-    FILE *fp=fopen("/home/ff19085/CLionProjects/clion/test.txt","r");
+    FILE *fp=fopen("D:\\Coding Practise\\Clion_practise\\test.txt","r");
     char *start="wild",*end="tame";
-    int i,j,flag,diff=countdiff(start,end);
-    char **res=(char **)malloc(sizeof(char *)*diff);
-    for(i=0;i<diff;i++)
-    {
-        *(res+i)=(char *)malloc(sizeof(char)*strlen(start));
-    }
-    *(res)=start;
-    *(res+1)=end;
-    res=wordladders(fp,start,end,res,diff);
+    int i,diff=countdiff(start,end);
+    Node *head=create(start,end);
+
+    wordladders(fp,start,end,head,diff,diff);
 
     return 0;
+}
+
+Node *create(char *start, char *end)
+{
+    Node *head=(Node *)malloc(sizeof(Node));
+    Node *p=(Node *)malloc(sizeof(Node));
+    head->word=(char *)malloc(sizeof(char)*strlen(start));
+    head->word=start;
+    p->word=(char *)malloc(sizeof(char)*strlen(end));
+    p->word=end;
+    head->next=p;
+    p->next=NULL;
+    return head;
 }
 
 int countdiff(char *a,char *b)
@@ -34,11 +49,10 @@ int countdiff(char *a,char *b)
             diff++;
         }
     }
-
     return diff;
 }
 
-char **wordladders(FILE *fp,char *start,char *end,char **res,int diff)
+void wordladders(FILE *fp,char *start,char *end,Node *head,int diff,int lenth)
 {
     char *temp=(char *)malloc(sizeof(char)*strlen(start));
     int i,j;
@@ -46,25 +60,32 @@ char **wordladders(FILE *fp,char *start,char *end,char **res,int diff)
     if(compare(start,end))
     {
 
-        for(i=0;i<5;i++)
-        {
-            for (j = 0; j <4 ; ++j) {
-                printf("%c",*(*(res+i)+j));
-            }
-            printf("\n");
-        }
-        return res;
+
     }
     do
     {
         fscanf(fp, "%s", temp);
-        if(compare(start,temp) && notin(temp,res))
+        if(compare(start,temp) && notin(temp,head,lenth) && diff>1)
         {
             *(res+diff-1)=temp;
-            wordladders(fp,temp,end,res,diff-1);
-        }
-    }while(!feof(fp));
+            /*for (i = 0;  i<strlen(temp) ; i++) {
+                printf("%c",*(temp+i));
+            }
+            printf("\n");*/
+            for(i=1;i>lenth;i++)
+            {
+                for (j = 0; j <strlen(start) ; ++j) {
+                    printf("%c",*(*(res+i)+j));
+                }
+                printf("\n");
+            }
+            wordladders(fp,temp,end,head,diff-1,lenth);
 
+            //*(res+diff-1)=NULL;
+            fseek(fp,0,SEEK_SET);
+        }
+
+    }while(!feof(fp));
 }
 
 int compare(char *a,char *b)
@@ -85,18 +106,20 @@ int compare(char *a,char *b)
             }
         }
     }
-    return (diff==0)?0:1;
+    return (diff==1)?1:0;
 }
 
-int notin(char *temp, char **res)
+int notin(char *temp, Node *head,int lenth)
 {
     int i;
-    for(i=0;i<strlen(res);i++)
+    Node *p=head;
+    while (p!=NULL)
     {
-        if(!strcmp(*(res+i),temp))
+        if(!strcmp(p->word,temp))
         {
             return 0;
         }
+        p=p->next;
     }
     return 1;
 }
