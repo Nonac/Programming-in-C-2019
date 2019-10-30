@@ -23,7 +23,7 @@ int main()
 
 int calcPattens(int last, int lenth, int *used)
 {
-    int sum=0,i;
+    int sum=0,i,j;
     if(lenth == 0)
     {
         return 1;
@@ -46,11 +46,7 @@ int isValid(int i,int last,int *used)
     {
         return 0;
     }
-    if(last == -1)
-    {
-        return 1;
-    }
-    if(((i-last==1)&&(i!=3&&i!=6))||((last-i==1)&&(last!=3&&last!=6)))
+    if(((i-last==1)&&((last!=2)&&(last!=5)))||((last-i==1)&&((i!=2)&&(i!=5))))
     {
         return 1;
     }
