@@ -14,7 +14,7 @@ int main()
     scanf("%d",&head);
     head--;
     lenth--;
-    for (i = 0; i < 9; ++i) {
+    for (i = 0; i < 25; ++i) {
         used[i]=0;
     }
     used[head]=1;
@@ -28,7 +28,7 @@ int calcPattens(int last, int lenth, int *used)
     {
         return 1;
     }
-    for(i=0;i<9;i++)
+    for(i=0;i<25;i++)
     {
         if(isValid(i,last,used))
         {
@@ -46,11 +46,13 @@ int isValid(int i,int last,int *used)
     {
         return 0;
     }
-    if(((i-last==1)&&((last!=2)&&(last!=5)))||((last-i==1)&&((i!=2)&&(i!=5))))
+    if(((i-last==1)&&((last!=4)&&(last!=9)&&(last!=14)\
+        &&(last!=19)))||((last-i==1)&&((i!=4)&&(i!=9)&&\
+        (i!=14)&&(i!=19))))
     {
         return 1;
     }
-    if((i-last==3)||(last-i==3))
+    if((i-last==5)||(last-i==5))
     {
         return 1;
     }
