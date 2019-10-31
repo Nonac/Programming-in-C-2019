@@ -10,7 +10,7 @@ typedef struct node
 
 int compare(char *a,char *b);
 int countdiff(char *a,char *b);
-void wordladders(FILE *fp,char *start,char *end,Node *head,int lenth);
+void wordladders(char *start,char *end,Node *head,int lenth);
 int notin(char *temp, Node *head);
 Node *create(char *start, char *end);
 Node *insert(Node *head,char *word);
@@ -20,12 +20,12 @@ int linkcompare(Node *head);
 
 int main()
 {
-    FILE *fp=fopen("/home/ff19085/CLionProjects/clion/34words.txt","r");
+
     char *start="wild",*end="tame";
-    int i,diff=countdiff(start,end);
+    int diff=countdiff(start,end);
     Node *head=create(start,end);
 
-    wordladders(fp,start,end,head,diff);
+    wordladders(start,end,head,diff);
 
     return 0;
 }
@@ -82,7 +82,10 @@ void printlink(Node *head)
         {
             printf("%c",p->word[i]);
         }
-        printf(" -> ");
+        if(p->next!=NULL)
+        {
+            printf(" -> ");
+        }
         p=p->next;
     }while (p!=NULL);
     printf("\n");
@@ -101,24 +104,25 @@ int countdiff(char *a,char *b)
     return diff;
 }
 
-void wordladders(FILE *fp,char *start,char *end,Node *head,int lenth)
+void wordladders(char *start,char *end,Node *head,int lenth)
 {
+    FILE *fp=fopen("34words.txt","r");
     char *temp=(char *)malloc(sizeof(char)*strlen(start));
-    fseek(fp,0,SEEK_SET);
-    if(linkcompare(head)&&lenth>2)
+    if(linkcompare(head))
     {
         printlink(head);
     }
-    do
+    while(!(feof(fp))&&lenth>1)
     {
-        fscanf(fp, "%s", temp);
-        if(compare(start,temp) && notin(temp,head))
+        if(compare(start,temp) && notin(temp,head)&&lenth>2)
         {
             head=insert(head,temp);
-            wordladders(fp,temp,end,head,lenth-1);
+            wordladders(temp,end,head,lenth-1);
             head=del(head,temp);
         }
-    }while(!feof(fp));
+        fscanf(fp,"%s",temp);
+    }
+
 }
 
 int linkcompare(Node *head)
@@ -174,3 +178,4 @@ int notin(char *temp, Node *head)
     }
     return 1;
 }
+

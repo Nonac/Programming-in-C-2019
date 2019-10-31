@@ -6,13 +6,10 @@ Update note:
 
 -5_2 debug
 -5_4 forth question(because of it is dull :D)
+-5_8 debug but it works
 ---
 +Undo:
 
--5_6 
--5_7 
--5_8
 ---
 +Force on:
 
--5_6 -5_7 -5_8
