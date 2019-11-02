@@ -1,0 +1,129 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define N 20
+void change(int **p);
+
+int main()
+{
+    int i,j;
+    int **p=(int **)malloc(sizeof(int *)*N);
+    for(i=0;i<N;i++)
+    {
+        *(p+i)=(int *)malloc(sizeof(int)*N);
+    }
+    srand((unsigned)time(NULL));
+    for (i = 0;  i<N ; i++)
+    {
+        for (j = 0;  j<N ; j++)
+        {
+            *(*(p+i)+j)=rand()%10;
+        }
+    }
+
+    change(p);
+    return 0;
+}
+
+void change(int **p)
+{
+    int i,j,k,temp;
+    for(i=0;i<(N*N*N);i++)
+    {
+        j=rand()%N;
+        k=rand()%(N-1);
+        if(p[j][k]>p[j][k+1])
+        {
+            temp=*(*(p+j)+k);
+            *(*(p+j)+k)=*(*(p+j)+k+1);
+            *(*(p+j)+k+1)=temp;
+        }
+        j=rand()%(N-1);
+        k=rand()%N;
+        if(*(*(p+j)+k)>*(*(p+j+1)+k))
+        {
+            temp=*(*(p+j)+k);
+            *(*(p+j)+k)=*(*(p+j+1)+k);
+            *(*(p+j+1)+k)=temp;
+        }
+    }
+    for (i = 0;  i<N ; i++)
+    {
+        for (j = 0;  j<N ; j++)
+        {
+            printf("%d",*(*(p+j)+k));
+        }
+        printf("\n");
+    }
+}
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define N 21
+void change(int **p);
+
+int main()
+{
+    int i,j;
+    int **p=(int **)malloc(sizeof(int *)*N);
+    for(i=0;i<N;i++)
+    {
+        *(p+i)=(int *)malloc(sizeof(int)*N);
+    }
+    srand((unsigned)time(NULL));
+    for (i = 0;  i<N ; i++)
+    {
+        for (j = 0;  j<N ; j++)
+        {
+            *(*(p+i)+j)=rand()%10;
+        }
+    }
+
+    change(p);
+    return 0;
+}
+
+void change(int **p)
+{
+    int i,j,k,temp;
+    for(i=0;i<(N*N*N*N);i++)
+    {
+        j=rand()%N;
+        k=rand()%(N-1);
+        if((p[j][k]>p[j][k+1])&&((k+k+1)>N))
+        {
+            temp=*(*(p+j)+k);
+            *(*(p+j)+k)=*(*(p+j)+k+1);
+            *(*(p+j)+k+1)=temp;
+        }
+        if((p[j][k]<p[j][k+1])&&((k+k+1)<N))
+        {
+            temp=*(*(p+j)+k);
+            *(*(p+j)+k)=*(*(p+j)+k+1);
+            *(*(p+j)+k+1)=temp;
+        }
+        j=rand()%(N-1);
+        k=rand()%N;
+        if((*(*(p+j)+k)>*(*(p+j+1)+k))&&((j+j+1)>N))
+        {
+            temp=*(*(p+j)+k);
+            *(*(p+j)+k)=*(*(p+j+1)+k);
+            *(*(p+j+1)+k)=temp;
+        }
+        if((*(*(p+j)+k)<*(*(p+j+1)+k))&&((j+j+1)<N))
+        {
+            temp=*(*(p+j)+k);
+            *(*(p+j)+k)=*(*(p+j+1)+k);
+            *(*(p+j+1)+k)=temp;
+        }
+    }
+    for (i = 0;  i<N ; i++)
+    {
+        for (j = 0;  j<N ; j++)
+        {
+            printf("%d",*(*(p+j)+k));
+        }
+        printf("\n");
+    }
+}
