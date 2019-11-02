@@ -4,31 +4,31 @@
 typedef struct node
 {
     int prime;
-    struct Node *next;
+    struct node *next;
 }Node;
 
 Node *calprime(char *argv);
-Node * create();
+Node *create();
 Node *createprime(int temp);
 Node *insert(Node *head,int cnt);
 Node *findprime(Node *headprime, int temp);
 void printlink(char *argv,Node *head);
 
-int main(int argc, char **argv)
+int main()
 {
-    if(argc==2)
-    {
-        Node *head=calprime(argv[1]);
-        printlink(argv[1],head);
-    } else{
-        printf("Error.\n");
-    }
+
+
+    Node *head=calprime("768");
+    printlink("768",head);
+
     return 0;
 }
 
 Node *create()
 {
     Node *head=(Node *)malloc(sizeof(Node));
+    head->next=NULL;
+    head->prime=0;
     return head;
 }
 
@@ -58,14 +58,20 @@ Node *createprime(int temp)
 Node *insert(Node *head,int cnt)
 {
     Node *p=head,*temp=create();
-    while (p->next!=NULL)
+    if(head->next==NULL&&head->prime==0)
     {
-        p=p->next;
+        head->prime=cnt;
+        return head;
     }
-    temp->prime=cnt;
-    p->next=temp;
-    temp->next=NULL;
+    while (p->next != NULL) {
+        p = p->next;
+    }
+    temp->prime = cnt;
+    p->next = temp;
+    temp->next = NULL;
+
     return head;
+
 }
 
 
@@ -75,17 +81,18 @@ Node *calprime(char *argv)
     Node *headprime=createprime(temp);
     Node *p=headprime;
     Node *head=create();
-    Node *restemp=create();
+    Node *restemp;
     Node *current=head;
     while(temp>1)
     {
+        restemp=create();
         p=findprime(p,temp);
         restemp->prime=p->prime;
         current->next=restemp;
         current=current->next;
-        temp/=p->prime;
+        temp=temp/p->prime;
     }
-    return head;
+    return head->next;
 }
 
 Node *findprime(Node *p, int temp)
@@ -102,16 +109,23 @@ void printlink(char *argv,Node *head)
     int cnt=0,temp=0;
     Node *p=head;
     printf("%d = ",atoi(argv));
-    temp=head->prime;
-    while (p->next!=NULL)
+
+    while (p!=NULL)
     {
-        while(temp==p->prime)
-        {
-           p=p->next;
-           cnt++;
-        }
-        printf("%d^%d ",temp,cnt);
         temp=p->prime;
+        do{
+            cnt++;
+            p=p->next;
+            if(p==NULL)
+            {
+                break;
+            }
+        }while(temp==p->prime);
+        printf("%d^%d ",temp,cnt);
+        if(p!=NULL)
+        {
+            printf("* ");
+        }
         cnt=0;
     }
 }
