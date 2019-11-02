@@ -104,5 +104,5 @@ int compare(char *a, char*b)
 			return 1;
 		}
 	}
-	return (strlen(a)>strlen(b)?1:0;
+	return (strlen(a)>strlen(b))?1:0;
 }

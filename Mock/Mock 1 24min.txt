@@ -1,0 +1,170 @@
+#include <stdio.h>
+#include<string.h>
+#include <ctype.h>
+#include <assert.h>
+#define ALPHABET 26
+
+int anagram(char s1[], char s2[]);
+int *prime();
+unsigned long mul(char *c);
+
+int main(void)
+{
+    assert(anagram("elvis","lives")==1);
+    assert(anagram("dreads","sadder")==1);
+    assert(anagram("replays","parsley")==1);
+    assert(anagram("listen","silent")==1);
+    assert(anagram("orchestra","carthorse")==1);
+
+    assert(anagram("elvis","elvis")==0);
+    assert(anagram("neill","neil")==0);
+    assert(anagram("neil","neill")==0);
+    assert(anagram("horse","short")==0);
+
+    return 0;
+}
+
+int anagram(char s1[], char s2[])
+{
+    char *a=s1,*b=s2;
+    unsigned long mula,mulb;
+    if (strlen(a)!=strlen(b))
+    {
+        return 0;
+    } else if(!strcmp(a,b))
+    {
+        return 0;
+    }else{
+        mula=mul(a);
+        mulb=mul(b);
+        if(mula==mulb)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+unsigned long mul(char *c)
+{
+    int *letter=prime();
+    unsigned long res=1;
+    int i;
+    for (i = 0;  i<strlen(c) ; i++) {
+        res*=letter[c[i]-'a'];
+    }
+    return res;
+}
+
+int *prime()
+{
+    int flag,i,j,cnt=2,total=0;
+    int letter[ALPHABET]={0};
+    int *letterprime=letter;
+    for (i = 0; total <ALPHABET ; i++) {
+        flag=0;
+        for (j = 2; j < cnt; ++j) {
+            if(cnt%j==0)
+            {
+                flag=1;
+            }
+        }
+        if(j==cnt&&flag==0)
+        {
+            letter[total]=cnt;
+            total++;
+        }
+        cnt++;
+    }
+    return letterprime;
+}
+
+#include <stdio.h>
+#include<string.h>
+#include <ctype.h>
+#include <assert.h>
+#define ALPHABET 26
+
+int anagram(char s1[], char s2[]);
+int *prime();
+unsigned long mul(char *c);
+
+int main(void)
+{
+    assert(anagram("elvis","lives")==0);
+    assert(anagram("dreads","sadder")==1);
+    assert(anagram("replays","parsley")==1);
+    assert(anagram("listen","silent")==0);
+    assert(anagram("orchestra","carthorse")==1);
+
+    assert(anagram("elvis","elvis")==0);
+    assert(anagram("neill","neil")==0);
+    assert(anagram("neil","neill")==0);
+    assert(anagram("horse","short")==0);
+
+    return 0;
+}
+
+int anagram(char s1[], char s2[])
+{
+    char *a=s1,*b=s2;
+    int i;
+    unsigned long mula,mulb;
+    if (strlen(a)!=strlen(b))
+    {
+        return 0;
+    } else if(!strcmp(a,b))
+    {
+        return 0;
+    } else{
+        for(i=0;i<strlen(a);i++)
+        {
+            if(s1[i]==s2[i])
+            {
+                return 0;
+            }
+        }
+        mula=mul(a);
+        mulb=mul(b);
+        if(mula==mulb)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+unsigned long mul(char *c)
+{
+    int *letter=prime();
+    unsigned long res=1;
+    int i;
+    for (i = 0;  i<strlen(c) ; i++) {
+        res*=letter[c[i]-'a'];
+    }
+    return res;
+}
+
+int *prime()
+{
+    int flag,i,j,cnt=2,total=0;
+    int letter[ALPHABET]={0};
+    int *letterprime=letter;
+    for (i = 0; total <ALPHABET ; i++) {
+        flag=0;
+        for (j = 2; j < cnt; ++j) {
+            if(cnt%j==0)
+            {
+                flag=1;
+            }
+        }
+        if(j==cnt&&flag==0)
+        {
+            letter[total]=cnt;
+            total++;
+        }
+        cnt++;
+    }
+    return letterprime;
+}
+
