@@ -1,14 +1,13 @@
 ##COMSM1201_2019_TB-1: Programming in C 2019
 
-Compiler flag:
+####Compiler flag:
 -pedantic -Wall -Wextra -Wfloat-equal -ansi -O2
 -lm
 
 ---
 ###Update note:
 ---
-####Unfinish:
-#####5.2 debug
+####Unfinish: 5.2 debug
 ---
 ####Undo:
 
