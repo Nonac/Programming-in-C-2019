@@ -14,6 +14,7 @@ int countwords(FILE *fp,int cnt);
 int isletter(char c);
 char **insertsort(char **array,int cnt);
 int weight(int first,int last,char **array,int cnt);
+int countlen(char *c);
 
 int main()
 {
@@ -21,7 +22,7 @@ int main()
     startTime = clock();
     char **array=(char **)malloc(sizeof(char *));
     int cnt=0;
-    FILE *fp=fopen("/home/ff19085/CLionProjects/clion/34words.txt","r");
+    FILE *fp=fopen("test.txt","r");
     array=readinline(fp,array,cnt);
     cnt=countwords(fp,cnt);
     printarray(array,cnt);
@@ -54,10 +55,20 @@ char **insert(char **array,char *temp,int cnt)
     return insertsort(array,cnt);
 }
 
+int countlen(char *c)
+{
+    int cnt=0;
+    while(*(c+cnt)<='z'&&*(c+cnt)>='a')
+    {
+        cnt++;
+    }
+    return cnt;
+}
+
 int compare(char *a, char *b)
 {
-    int lentha=strlen(a);
-    int lenthb=strlen(b);
+    int lentha=countlen(a);
+    int lenthb=countlen(b);
     int min=tomin(lentha,lenthb);
     int i;
     for (i = 0;  i<min ; i++)
@@ -81,8 +92,8 @@ int tomin(int x, int y)
 
 void change(char *a, char *b)
 {
-    int lentha=strlen(a);
-    int lenthb=strlen(b);
+    int lentha=countlen(a);
+    int lenthb=countlen(b);
     int i;
     char *tempa=(char *)malloc(sizeof(char)*lentha);
     char *tempb=(char *)malloc(sizeof(char)*lenthb);
@@ -175,11 +186,12 @@ char **insertsort(char **array,int cnt)
 
 int weight(int first,int last,char **array,int cnt)
 {
-    int pos=0;
-    while(*(*(array+first)+pos)!=*(*(array+last)+pos))
+    int pos=0,res;
+    while(*(*(array+first)+pos)==*(*(array+last)+pos))
     {
         pos++;
     }
-    return first+(*(*(array+cnt-1)+pos)-*(*(array+first)+pos))\
-        /(*(*(array+last)+pos)-*(*(array+first)+pos))*(last-first);
+    res=first+(*(*(array+cnt-1)+pos)-*(*(array+first)+pos))\
+        /(*(*(array+last)+pos)-*(*(array+first)+pos))*(last-first)-1;
+    return (res<0)?0:res;
 }
