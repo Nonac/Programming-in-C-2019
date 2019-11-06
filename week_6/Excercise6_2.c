@@ -12,6 +12,8 @@ int tomin(int x, int y);
 void printarray(char **array, int cnt);
 int countwords(FILE *fp,int cnt);
 int isletter(char c);
+char **binsort(char **array,int cnt);
+
 
 int main()
 {
@@ -19,12 +21,12 @@ int main()
     startTime = clock();
     char **array=(char **)malloc(sizeof(char *));
     int cnt=0;
-    FILE *fp=fopen("34words.txt","r");
+    FILE *fp=fopen("/home/ff19085/CLionProjects/clion/34words.txt","r");
     array=readinline(fp,array,cnt);
     cnt=countwords(fp,cnt);
     printarray(array,cnt);
     endTime = clock();
-    printf("Total time is:%lf\n",(double)(endTime - startTime) / CLOCKS_PER_SEC);	
+    printf("Total time is:%lf\n",(double)(endTime - startTime) / CLOCKS_PER_SEC);
 }
 
 char **readinline(FILE *fp, char **array,int cnt)
@@ -49,14 +51,7 @@ char **insert(char **array,char *temp,int cnt)
     {
         *(*(array+cnt-1)+i)=*(temp+i);
     }
-    for(i=cnt-1;i>0;i--)
-    {
-        if(compare(*(array+i),*(array+i-1)))
-        {
-            change(*(array+i),*(array+i-1));
-        }
-    }
-    return array;
+    return binsort(array,cnt);
 }
 
 int compare(char *a, char *b)
@@ -150,4 +145,29 @@ int isletter(char c)
         return 1;
     }
     return 0;
+}
+
+char **binsort(char **array,int cnt)
+{
+    int first=0;
+    int last=cnt-1;
+    int mid=0;
+    int p=cnt-1;
+    int i;
+    while(first<last)
+    {
+        mid=first+(last-first)/2;
+        if(compare(*(array+p),*(array+mid)))
+        {
+            last=mid;
+        } else
+        {
+            first=mid+1;
+        }
+    }
+    for(i=cnt-1;i>first;i--)
+    {
+        change(*(array+i),*(array+i-1));
+    }
+    return array;
 }

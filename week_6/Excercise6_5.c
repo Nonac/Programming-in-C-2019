@@ -18,8 +18,8 @@ int main()
 {
 
 
-    Node *head=calprime("768");
-    printlink("768",head);
+    Node *head=calprime("320");
+    printlink("320",head);
 
     return 0;
 }
@@ -30,7 +30,7 @@ Node *create()
     head->next=NULL;
     head->prime=0;
     return head;
-}
+}    Node *headprime=createprime(temp);
 
 Node *createprime(int temp)
 {
@@ -107,7 +107,7 @@ Node *findprime(Node *p, int temp)
 void printlink(char *argv,Node *head)
 {
     int cnt=0,temp=0;
-    Node *p=head;
+    Node *p=head;    Node *headprime=createprime(temp);
     printf("%d = ",atoi(argv));
 
     while (p!=NULL)
