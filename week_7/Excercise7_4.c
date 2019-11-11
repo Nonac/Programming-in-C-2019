@@ -17,6 +17,7 @@ struct c
 }check[9];
 
 void assign();
+void eightpuzzle(int m[3][3]);
 int getinversion(int a[]);
 int solvable(int a[3][3]);
 void priority(list t);
@@ -32,8 +33,7 @@ list dequeue(list t);
 int main(int argc, char **argv)
 {
     clock_t startTime,endTime;
-    int flag,i,j,cnt=0;
-    list open,closed,t,temp,p,q;
+    int i,j,cnt=0;
     int m[3][3];
     /*p is for temporaraly handling closed,t is for holding open,
      * temp is return movgen,q for temporarily holding movgen*/
@@ -53,84 +53,91 @@ int main(int argc, char **argv)
                 {
                     m[i][j]=0;
                     cnt++;
+                } else{
+                    printf("Error input.\n");
                 }
             }
         }
-
-        closed=open=NULL;
         assign();
         /*used in calculating the hash value*/
-
-        if(solvable(m))
-        {
-            open=insert(open,NULL,0,m);
-            while(open!=NULL)
-            {
-                if(!goaltest(open))
-                {
-                    temp=movegen(open);
-                    t=open;
-                    open=dequeue(open);
-                    t->next=NULL;
-                    if(closed==NULL)
-                    {
-                        closed=t;
-                    }
-                    else
-                    {
-                        p=closed;
-                        while(p->next!=NULL)
-                        {
-                            p=p->next;
-                        }
-
-                        p->next=t;
-                    }
-                    while(temp!=NULL)
-                    {
-                        q=temp;
-                        temp=dequeue(temp);
-                        q->next=NULL;
-                        t=open;
-                        while(t!=NULL&&!(compare(t->data,q->data)))
-                        {
-                            t=t->next;
-                        }
-                        if(t==NULL)
-                        {
-                            p=closed;
-                            while(p!=NULL&&(!compare(p->data,q->data)))
-                            {
-                                p=p->next;
-                            }
-                            if(p==NULL)
-                            {
-                                if(solvable(q->data))
-                                {
-                                    flag=0;
-                                    open=proenqueue(open,q,flag);
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    result(open);
-                    endTime = clock();
-                    printf("Total time is:%fs\n",(double)(endTime - startTime) / CLOCKS_PER_SEC);
-                    return 0;
-                }
-            }
-        }
-        else
-        {
-            printf("\nnot solvable ");
-        }
+        eightpuzzle(m);
+        endTime = clock();
+        printf("Total time is:%fs\n",(double)(endTime - startTime) / CLOCKS_PER_SEC);
     } else{
         printf("Error argv.");
     }
     return 0;
+}
+
+void eightpuzzle(int m[3][3])
+{
+    int flag;
+    list open,closed,t,temp,p,q;
+    closed=open=NULL;
+    if(solvable(m))
+    {
+        open=insert(open,NULL,0,m);
+        while(open!=NULL)
+        {
+            if(!goaltest(open))
+            {
+                temp=movegen(open);
+                t=open;
+                open=dequeue(open);
+                t->next=NULL;
+                if(closed==NULL)
+                {
+                    closed=t;
+                }
+                else
+                {
+                    p=closed;
+                    while(p->next!=NULL)
+                    {
+                        p=p->next;
+                    }
+
+                    p->next=t;
+                }
+                while(temp!=NULL)
+                {
+                    q=temp;
+                    temp=dequeue(temp);
+                    q->next=NULL;
+                    t=open;
+                    while(t!=NULL&&!(compare(t->data,q->data)))
+                    {
+                        t=t->next;
+                    }
+                    if(t==NULL)
+                    {
+                        p=closed;
+                        while(p!=NULL&&(!compare(p->data,q->data)))
+                        {
+                            p=p->next;
+                        }
+                        if(p==NULL)
+                        {
+                            if(solvable(q->data))
+                            {
+                                flag=0;
+                                open=proenqueue(open,q,flag);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                result(open);
+                return;
+            }
+        }
+    }
+    else
+    {
+        printf("\nnot solvable.");
+    }
 }
 
 list dequeue(list t)
