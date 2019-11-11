@@ -70,6 +70,8 @@
 	- [x] 6.5 质数因式分解
 	- [x] 6.7 谢尔宾地毯
 	- [x] 6.11 谢尔宾三角
+- [x] week_7
+	- [x] 7.4 eight-puzzle [A*;double link list]
 - [x] Mock
 	- [x] 1.简易Anagrams判断
 	- [x] 2.单词不含重复字母
