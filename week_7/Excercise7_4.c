@@ -339,9 +339,12 @@ int compare(int x[3][3],int y[3][3])
 }
 void result(list t)
 {
+    static int cnt=0;
     if(t!=NULL)
     {
         result(t->parent);
+	printf("\nThis is No.%d step:\n",cnt);
+	cnt++;	
         printout(t->data);
     }
 }
