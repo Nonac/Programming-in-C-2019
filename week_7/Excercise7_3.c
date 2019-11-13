@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "neillsdl2.h"
 #define MAXSIZE 362880
+#define MILLISECONDDELAY 20
 
 typedef struct node
 {
@@ -9,13 +11,19 @@ typedef struct node
     int parent;
 }Node;
 
+typedef struct res
+{
+    char data[3][3];
+    struct res *next;
+}Res;
+
 typedef struct coordinate
 {
     int x;
     int y;
 }Zero;
 
-void eightpuzzle(int m[3][3]);
+void eightpuzzle(int m[3][3],Res *res);
 void readin(Node array[MAXSIZE],int m[3][3]);
 int solvable(int a[3][3]);
 int getinversion(int a[]);
@@ -28,15 +36,18 @@ void copynext(Node array[MAXSIZE],int times,int cnt);
 int checkdata(Node array[MAXSIZE],int i,int cnt);
 int checklist(Node array[MAXSIZE],int cnt);
 int isValid(int i, int j);
-void printlist(Node array[MAXSIZE],int cnt);
-void printout(int x[3][3]);
+void printlist(Node array[MAXSIZE],int cnt,Res *res);
+void printout(int x[3][3],Res *res);
+void putinlist(int m[3][3],Res *res);
+void sdl(Res *res);
+void loop(Res *res);
 
 int main(int argc, char **argv)
 {
-    clock_t startTime=clock(),endTime;
     char *s = argv[1];
     int m[3][3], i, j, cnt = 0;
-
+    Res *res=(Res *)malloc(sizeof(Res));
+    res->next=NULL;
     if(argc!=2)
     {
         printf("Error argv.\n");
@@ -55,13 +66,67 @@ int main(int argc, char **argv)
             }
         }
     }
-    eightpuzzle(m);
-    endTime = clock();
-    printf("Total time is:%fs\n",(double)(endTime - startTime) / CLOCKS_PER_SEC);
+    putinlist(m,res);
+    eightpuzzle(m,res);
+    loop(res);
+    sdl(res);
     return 0;
 }
 
-void eightpuzzle(int m[3][3])
+void loop(Res *res)
+{
+    Res *head=res;
+    while(res->next!=NULL)
+    {
+        res=res->next;
+    }
+    res->next=head;
+}
+
+void sdl(Res *res)
+{
+    SDL_Simplewin sw;
+    fntrow fontdata[FNTCHARS][FNTHEIGHT];
+    int i,j;
+    Neill_SDL_Init(&sw);
+    do{
+        SDL_Delay(MILLISECONDDELAY);
+        Neill_SDL_ReadFont(fontdata, "mode7.fnt");
+        for(i=0;i<3;i++)
+        {
+            for(j=0;j<3;j++)
+            {
+                Neill_SDL_DrawChar(&sw,fontdata,res->data[j][i],50+20*i,50+20*j);
+            }
+        }
+
+        SDL_Delay(1000);
+        Neill_SDL_UpdateScreen(&sw);
+        res=res->next;
+        Neill_SDL_Events(&sw);
+    }while(!sw.finished);
+    SDL_Quit();
+    atexit(SDL_Quit);
+}
+
+void putinlist(int m[3][3],Res *res)
+{
+    int i,j;
+    for(i=0;i<3;i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            if(m[i][j]!=0)
+            {
+                res->data[i][j]=m[i][j]+'0';
+            } else{
+                res->data[i][j]=' ';
+            }
+        }
+    }
+}
+
+void eightpuzzle(int m[3][3],Res *res)
 {
     static Node array[MAXSIZE];
     Zero *zero=(Zero *)malloc(sizeof(Zero));
@@ -80,36 +145,43 @@ void eightpuzzle(int m[3][3])
         cnt+=next(array,times,cnt,zero);
         zero=findzero(array,times+1,zero);
     }
-    printlist(array,times);
+    printlist(array,times,res);
 }
 
-void printlist(Node array[MAXSIZE],int cnt)
+void printlist(Node array[MAXSIZE],int cnt,Res *res)
 {
-    static int total=0;
-    if(cnt!=0)
+    if(array[cnt].parent!=0)
     {
-        printlist(array, array[cnt].parent);
+        printlist(array, array[cnt].parent,res);
     }
-        printf("\nThis is No.%d step:\n",total);
-        total++;
-        printout(array[cnt].data);
+        printout(array[cnt].data,res);
 }
 
-void printout(int x[3][3])
+void printout(int x[3][3],Res *res)
 {
     int i,j;
+    Res *head=res,*p;
+    p=(Res *)malloc(sizeof(Res));
+    p->next=NULL;
     for(i=0;i<3;i++)
-    {for(j=0;j<3;j++)
+    {
+        for(j=0;j<3;j++)
         {
             if(x[i][j]==0)
-                printf("  ");
+            {
+                p->data[i][j]=' ';
+            }
             else
-                printf("%d ",x[i][j]);
+            {
+                p->data[i][j]=x[i][j]+'0';
+            }
         }
-        if(i!=2)
-            printf("\n");
     }
-    printf("\n\n");
+    while (head->next!=NULL)
+    {
+        head=head->next;
+    }
+    head->next=p;
 }
 
 int isValid(int i, int j)
@@ -265,3 +337,4 @@ int getinversion(int a[])
         }
     return inv;
 }
+
