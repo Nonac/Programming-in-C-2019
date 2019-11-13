@@ -87,6 +87,7 @@ void eightpuzzle(int m[3][3])
         exit(EXIT_FAILURE);
     }
     open=insert(open,NULL,0,m);
+
     while(open!=NULL)
     {
         if(!goaltest(open))
@@ -277,39 +278,34 @@ void findzero(int temp[3][3],int *itemp,int *jtemp)
     }
 }
 
+int isValid(int i, int j)
+{
+    if (i < 0 || i >= 3 || j < 0 || j >= 3)
+        return 0;
+    return 1;
+}
+
 list movegen(list t)
 {
     list head;
-    int i=0,j=0,temp[3][3];
+    int i=0,j=0,temp[3][3],x,y;
     int *itemp=&i;
     int *jtemp=&j;
     head=NULL;
     copydata(temp,t);
     findzero(temp,itemp,jtemp);
 
-    if((i-1)>=0)
+    for(x=i-1;x<i+2;x++)
     {
-        swap(&temp[i][j],&temp[i-1][j]);
-        head=insert(head,t,t->level,temp);
-        swap(&temp[i][j],&temp[i-1][j]);
-    }
-    if((i+1)<3)
-    {
-        swap(&temp[i][j],&temp[i+1][j]);
-        head=insert(head,t,t->level,temp);
-        swap(&temp[i][j],&temp[i+1][j]);
-    }
-    if((j-1)>=0)
-    {
-        swap(&temp[i][j],&temp[i][j-1]);
-        head=insert(head,t,t->level,temp);
-        swap(&temp[i][j],&temp[i][j-1]);
-    }
-    if((j+1)<3)
-    {
-        swap(&temp[i][j],&temp[i][j+1]);
-        head=insert(head,t,t->level,temp);
-        swap(&temp[i][j],&temp[i][j+1]);
+        for(y=j-1;y<j+2;y++)
+        {
+            if(abs(i-x)+abs(j-y)==1 && isValid(x,y))
+            {
+                swap(&temp[x][y],&temp[i][j]);
+                head=insert(head,t,t->level,temp);
+                swap(&temp[x][y],&temp[i][j]);
+            }
+        }
     }
     t=head;
     return t;
