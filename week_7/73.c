@@ -4,6 +4,8 @@
 *				*
 *********************************/
 
+/*This code base on BFS Algotithm and 1-D array structure.*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -15,18 +17,21 @@
 #define LENTH 3
 #define GAP 50
 
+/*use structure to store data and parent.*/
 typedef struct node
 {
     int data[LENTH][LENTH];
     int parent;
 }Node;
 
+/*use list structure to store result*/
 typedef struct res
 {
     char data[LENTH][LENTH];
     struct res *next;
 }Res;
 
+/*use structure to store zero coordinate in data*/
 typedef struct coordinate
 {
     int x;

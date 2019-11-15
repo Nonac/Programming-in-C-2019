@@ -128,7 +128,7 @@ void eightpuzzle(int m[LENTH][LENTH])
      * t        is for temporarily holding open.
      * temp     is for return Function movgen which generate
      *       next step.
-     * q        is for temporarily holding movgen.
+     * q        is for temporarily holfile:///usr/share/doc/HTML/index.htmlding movgen.
      * open     is for a possible shortest way to target.
      * closed   is for the node whose priority larger than
      *      the same level in open list,and we must save
@@ -484,10 +484,12 @@ void priority(list t)
     for(i=0;i<LENTH;i++)
         for(j=0;j<LENTH;j++)
         {
-            /*This is the A* Algorithm core code I think.
+            /*This is the A* Algorithm core code.
              * Through the sequence difference between the
              * matrix and the target matrix, a hash value
-             * belonging to the current matrix is obtained.*/
+             * belonging to the current matrix is obtained.
+		F(n)=f(n)+g(n)
+	     **/
             t->pro=t->pro+abs(check[t->data[i][j]].row-i)\
             +abs(check[t->data[i][j]].col-j);
         }

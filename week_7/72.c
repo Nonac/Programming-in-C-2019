@@ -4,6 +4,8 @@
 *				*
 *********************************/
 
+/*This code base on BFS Algotithm and 1-D array structure.*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
