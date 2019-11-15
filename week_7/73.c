@@ -1,3 +1,9 @@
+/********************************
+*				*
+*Code by ff19085 Yinan Yang	*
+*				*
+*********************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -228,7 +234,11 @@ void printlist(Node array[MAXSIZE],int cnt,Res *res)
     }
     printout(array[cnt].data,res);
 }
-
+/********************************
+*				*
+*Code bt ff19085 Yinan Yang	*
+*				*
+*********************************/
 /*print out the array to a single list*/
 void printout(int x[LENTH][LENTH],Res *res)
 {
@@ -261,7 +271,11 @@ void printout(int x[LENTH][LENTH],Res *res)
 int isvalid(int i, int j)
 {
     if (i < 0 || i >= LENTH || j < 0 || j >= LENTH)
-    {
+    {/********************************
+*				*
+*Code bt ff19085 Yinan Yang	*
+*				*
+*********************************/
         return 0;
     }
     return 1;
@@ -294,7 +308,11 @@ int next(Node array[MAXSIZE],int times,int cnt,Zero *zero)
 /*Determine if the list has the same elements*/
 int checklist(Node array[MAXSIZE],int cnt)
 {
-    int i;
+    int i;/********************************
+*				*
+*Code bt ff19085 Yinan Yang	*
+*				*
+*********************************/
     for(i=0;i<cnt;i++)
     {
         if(checkdata(array,i,cnt))
@@ -326,13 +344,11 @@ int checkdata(Node array[MAXSIZE],int n,int cnt)
 void copynext(Node array[MAXSIZE],int times,int cnt)
 {
     int i, j;
-    int a[LENTH][LENTH];
     for (i=0;i<LENTH; i++)
     {
         for(j=0;j<LENTH;j++)
         {
             array[cnt].data[i][j]=array[times].data[i][j];
-            a[i][j]=array[times].data[i][j];
         }
     }
 

@@ -1,6 +1,6 @@
 CFLAGS = `sdl2-config --cflags` -O2 -Wall -Wextra -pedantic -Wfloat-equal -ansi
 INCS = neillsdl2.h
-TARGET = Excercise7_3
+TARGET = 73
 SOURCES =  $(TARGET).c neillsdl2.c 
 LIBS =  `sdl2-config --libs` -lm
 CC = gcc
