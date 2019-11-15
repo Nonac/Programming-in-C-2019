@@ -250,13 +250,11 @@ int checkdata(Node array[MAXSIZE],int n,int cnt)
 void copynext(Node array[MAXSIZE],int times,int cnt)
 {
     int i, j;
-    int a[LENTH][LENTH];
     for (i=0;i<LENTH; i++)
     {
         for(j=0;j<LENTH;j++)
         {
             array[cnt].data[i][j]=array[times].data[i][j];
-            a[i][j]=array[times].data[i][j];
         }
     }
 
