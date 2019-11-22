@@ -13,6 +13,8 @@ typedef struct node Node;
 Node *MakeNode(char c);
 void InsertRandom(Node *t, Node *n);
 char *PrintTree(Node *t);
+int maxDepth(Node* root);
+
 int main(void)
 {
     char c;
@@ -24,6 +26,7 @@ int main(void)
         InsertRandom(head, n);
     }
     printf("%s\n", PrintTree(head));
+    printf("The max depth is %d\n",maxDepth(head));
     return 0;
 }
 
@@ -64,4 +67,11 @@ char *PrintTree(Node *t)
     }
     sprintf(str, "%c (%s) (%s)", t->c, PrintTree(t->left), PrintTree(t->right));
     return str;
+}
+int maxDepth(Node* root){
+    int l=0,r=0;
+    if(root==NULL) return 0;
+    l=maxDepth(root->left)+1;
+    r=maxDepth(root->right)+1;
+    return l>r?l:r;
 }
