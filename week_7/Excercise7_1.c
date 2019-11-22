@@ -32,7 +32,7 @@ Node *movgen(Node *head, Node *end,Node *p,int x,int y,int cnt);
 int main()
 {
     char *sx="3";
-    char *sy="1";
+    char *sy="2";
     Node *head=create();
     Coordinate *goal=goalcreate(sx,sy);
 
