@@ -30,11 +30,17 @@ void codecount(Node *head,int len);
 
 int maxDepth(Node* root);
 
-int main(void)
+int main(int argc,char **argv)
 {
-    char *s="sample.txt";
-    Node *listhead=readin(s);
+    char *s;
+    Node *listhead;
     Node *treehead;
+    if(argc!=2)
+    {
+        printf("Error argc.");
+    }
+    s=argv[1];
+    listhead=readin(s);
     listhead=delzero(listhead);
     treehead=Huffman(listhead);
     depthcount(treehead,0);
@@ -88,8 +94,12 @@ void PrintTree(Node *head)
     int i;
     if(head->c!='\0')
     {
-        printf("\'%c\':",head->c);
-        for(i=10;i>=0;i--)
+        printf("\'%c\' : ",head->c);
+        for(i=11;i>head->depth-1;i--)
+        {
+            printf(" ");
+        }
+        for(i=head->depth-1;i>=0;i--)
         {
             if(head->code[i]==POSITIVE)
             {
@@ -100,7 +110,7 @@ void PrintTree(Node *head)
                 printf("0");
             }
         }
-        printf("(%d*%d)\n",head->depth,head->cnt);
+        printf("(%d * %d)\n",head->depth,head->cnt);
     }
     if(head->left!=NULL)
     {
