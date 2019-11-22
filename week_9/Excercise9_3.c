@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
-#include <time.h>
 #define POSITIVE 9
 #define NEGATIVE 8
 typedef struct node{
