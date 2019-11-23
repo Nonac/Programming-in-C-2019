@@ -6,7 +6,7 @@
 typedef struct node{
     char c;
     int cnt;
-    int code[11];
+    int code[20];
     int depth;
     struct node *left;
     struct node *right;
@@ -66,13 +66,13 @@ int depthcount(Node *treehead, int len)
 
 void codecount(Node *head,int len)
 {
-    static int a[11];
+    static int a[20];
     int i;
     if(head!=NULL)
     {
         if(head->right==NULL&&head->left==NULL)
         {
-            for(i=0;i<11;i++)
+            for(i=0;i<20;i++)
             {
                 head->code[i]=a[i];
             }
@@ -93,7 +93,7 @@ void PrintTree(Node *head)
     if(head->c!='\0')
     {
         printf("\'%c\' : ",head->c);
-        for(i=11;i>head->depth-1;i--)
+        for(i=20;i>head->depth-1;i--)
         {
             printf(" ");
         }
