@@ -1,4 +1,4 @@
-\/*00001(00002(00003(*)(00004(*)(00005(*)(*))))(*))(00006(00007(*)(*))(*))*/
+/*00001(00002(00003(*)(00004(*)(00005(*)(*))))(*))(00006(00007(*)(*))(*))*/
 
 #include<stdio.h>
 #include<string.h>
@@ -33,23 +33,24 @@ void widthcorrect(Node *treehead);
 int maxleft(Node *head,int len);
 void codecount(Node *head,int len);
 void rightfathercorrect(Node *head,int num);
-void leftfathercorrect(Node *head,int num);
+//void leftfathercorrect(Node *head,int num);
 
 int main()
 {
-    char *s="00001(00002(00003(*)(00004(*)(00005(*)(*))))(*))(00006(00007(*)(*))(00008(00009)(00010))";
+    char *s="00001(00002(00003(*)(00004(*)(00005(*)(*))))(*))(00006(00007(00011)(*))(00008(00009)(00010))";
     Node *treehead=readin(s);
     codecount(treehead,0);
     heightcount(treehead);
     widthcount(treehead);
     widthcorrect(treehead);
+    //先进行左节点偏移计算，再计算右节点
     rightfathercorrect(treehead,treehead->widthplus);
-    leftfathercorrect(treehead,treehead->rightfatherplus);
+   // leftfathercorrect(treehead,treehead->rightfatherplus);
     printtree(treehead);
     return 0;
 }
 
-void leftfathercorrect(Node *head,int num)
+/*void leftfathercorrect(Node *head,int num)
 {
     if(head!=NULL)
     {
@@ -63,7 +64,7 @@ void leftfathercorrect(Node *head,int num)
             rightfathercorrect(head->right,head->rightfatherplus);
         }
     }
-}
+}*/
 
 void rightfathercorrect(Node *head,int num)
 {
