@@ -3,10 +3,11 @@
 #include <assert.h>
 #define POSITIVE 9
 #define NEGATIVE 8
+#define MAXDEPTH 20
 typedef struct node{
     char c;
     int cnt;
-    int code[20];
+    int code[MAXDEPTH];
     int depth;
     struct node *left;
     struct node *right;
@@ -66,13 +67,13 @@ int depthcount(Node *treehead, int len)
 
 void codecount(Node *head,int len)
 {
-    static int a[20];
+    static int a[MAXDEPTH];
     int i;
     if(head!=NULL)
     {
         if(head->right==NULL&&head->left==NULL)
         {
-            for(i=0;i<20;i++)
+            for(i=0;i<MAXDEPTH;i++)
             {
                 head->code[i]=a[i];
             }
@@ -93,7 +94,7 @@ void PrintTree(Node *head)
     if(head->c!='\0')
     {
         printf("\'%c\' : ",head->c);
-        for(i=20;i>head->depth-1;i--)
+        for(i=MAXDEPTH;i>head->depth-1;i--)
         {
             printf(" ");
         }
@@ -229,8 +230,8 @@ Node *readin(char *s)
         {
             if(p->c==letter)
             {
-               p->cnt++;
-               flag=0;
+                p->cnt++;
+                flag=0;
             }
             p=p->next;
         }
