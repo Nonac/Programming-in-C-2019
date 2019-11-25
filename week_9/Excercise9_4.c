@@ -1,21 +1,12 @@
-/*00001(00002(00003(*)(00004(*)(00005(*)(*))))(*))(00006(00007(*)(*))(*))*/
-
 #include<stdio.h>
 #include<string.h>
 #include <stdlib.h>
 #include <assert.h>
-#define MAXDEPTH 20
-#define LEFT 9
-#define RIGHT 8
+#define SIZE 5
 
 typedef struct node
 {
-    char c[5];
-    int code[MAXDEPTH];
-    int width;
-    int height;
-    int widthplus;
-    int rightfatherplus;
+    char c[SIZE];
     struct node *left;
     struct node *right;
 }Node;
@@ -26,161 +17,62 @@ Node *maketreenode(char *num);
 void divleaf(char *lefts,char *rights,char *s);
 void copy(char *lefts,char *s,int begin, int end);
 int strlenth(char *s);
-void heightcount(Node *treehead);
-void widthcount(Node *treehead);
-void printtree(Node *treehead);
-void widthcorrect(Node *treehead);
-int maxleft(Node *head,int len);
-void codecount(Node *head,int len);
-void rightfathercorrect(Node *head,int num);
-//void leftfathercorrect(Node *head,int num);
+void Display(struct node* root, int ident);
+int isVaild(char c);
+
+
+int vec_left[100] = {0};
 
 int main()
 {
-    char *s="00001(00002(00003(*)(00004(*)(00005(*)(*))))(*))(00006(00007(00011)(*))(00008(00009)(00010))";
+    char *s="00001(00002(00003(00004(00005(*)(00009))(00007(*)(00008)))(00006))(*))(00010(00011(00012)(*))(00013(*)(*)))";
     Node *treehead=readin(s);
-    codecount(treehead,0);
-    heightcount(treehead);
-    widthcount(treehead);
-    widthcorrect(treehead);
-    //先进行左节点偏移计算，再计算右节点
-    rightfathercorrect(treehead,treehead->widthplus);
-   // leftfathercorrect(treehead,treehead->rightfatherplus);
-    printtree(treehead);
+
+    Display(treehead,0);
     return 0;
 }
 
-/*void leftfathercorrect(Node *head,int num)
+void Display(struct node* root, int ident)
 {
-    if(head!=NULL)
-    {
-        if(head->left!=NULL)
-        {
-            head->left->rightfatherplus += num;
-            leftfathercorrect(head->left,num);
-        }
-        if(head->right!=NULL)
-        {
-            rightfathercorrect(head->right,head->rightfatherplus);
-        }
-    }
-}*/
-
-void rightfathercorrect(Node *head,int num)
-{
-    if(head!=NULL)
-    {
-        if(head->right!=NULL)
-        {
-            head->right->rightfatherplus = num;
-            rightfathercorrect(head->right,head->right->rightfatherplus);
-        }
-        if(head->left!=NULL)
-        {
-            rightfathercorrect(head->left,head->rightfatherplus);
-        }
-    }
-}
-
-void widthcorrect(Node *treehead)
-{
-    if(treehead!=NULL)
-    {
-        treehead->widthplus = treehead->widthplus+maxleft(treehead->left,treehead->width)\
-            -treehead->width;
-        widthcorrect(treehead->left);
-        widthcorrect(treehead->right);
-    }
-}
-
-int maxleft(Node *head,int max)
-{
-
-    int temp=0;
-    if(head==NULL)
-    {
-        return max;
-    }
-
-    if(head->width>max)
-    {
-        max=head->width;
-    }
-    temp=maxleft(head->left,max);
-    if(temp>max)
-    {
-        max=temp;
-    }
-    temp=maxleft(head->right,max);
-    if(temp>max)
-    {
-        max=temp;
-    }
-    if(head->right==NULL && head->left==NULL)
-    {
-        return max;
-    }
-    return max;
-}
-
-void codecount(Node *head,int len)
-{
-    static int a[MAXDEPTH];
     int i;
-    if(head!=NULL)
+    if(ident > 0)
     {
-        for(i=0;i<MAXDEPTH;i++)
+        for(i = 0; i < ident - 1; ++i)
         {
-            head->code[i]=a[i];
+            printf(vec_left[i] ? "│   " : "    ");
         }
-        a[len]=LEFT;
-        codecount(head->left,len+1);
-        a[len]=RIGHT;
-        codecount(head->right,len+1);
-        a[len]=0;
+        printf(vec_left[ident-1] ? "├── " : "└── ");
     }
+
+    if(!root)
+    {
+        printf("\n");
+        return;
+    }
+
+    for(i=0;isVaild(root->c[i])||i<SIZE;i++)
+    {
+        printf("%c", root->c[i]);
+    }
+    printf("\n");
+    if(!root->left && !root->right)
+    {
+        return;
+    }
+
+    vec_left[ident] = 1;
+    Display(root->right, ident + 1);
+    vec_left[ident] = 0;
+    Display(root->left, ident + 1);
 }
 
-void widthcount(Node *treehead)
+int isVaild(char c)
 {
-    int w=0,i;
-    if(treehead!=NULL)
+    if(c>='0'&&c<='9')
     {
-        for(i=0;i<MAXDEPTH;i++)
-        {
-            if(treehead->code[i]==RIGHT)
-            {
-                w++;
-            }
-        }
-        treehead->width=w;
-        widthcount(treehead->left);
-        widthcount(treehead->right);
+        return 1;
     }
-}
-
-
-void heightcount(Node *treehead)
-{
-    int h=0,i;
-    if(treehead!=NULL)
-    {
-        for(i=0;i<MAXDEPTH;i++)
-        {
-            if(treehead->code[i]==LEFT)
-            {
-                h++;
-            }
-        }
-        treehead->height=h;
-        heightcount(treehead->left);
-        heightcount(treehead->right);
-    }
-}
-
-void printtree(Node *treehead)
-{
-
+    return 0;
 }
 
 Node *readin(char *s)
