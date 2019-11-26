@@ -83,6 +83,7 @@ void codecount(Node *head,int len)
             codecount(head->left,len+1);
             a[len]=NEGATIVE;
             codecount(head->right,len+1);
+	    a[len]=0;
         }
     }
 

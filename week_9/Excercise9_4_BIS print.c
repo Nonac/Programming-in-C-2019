@@ -3,14 +3,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #define SIZE 5
-#define LEFT 9
-#define RIGHT 8
-#define MAXDEPTH 20
 
 typedef struct node
 {
     char c[SIZE];
-    int code[MAXDEPTH];
     struct node *left;
     struct node *right;
 }Node;
@@ -21,127 +17,62 @@ Node *maketreenode(char *num);
 void divleaf(char *lefts,char *rights,char *s);
 void copy(char *lefts,char *s,int begin, int end);
 int strlenth(char *s);
-void codecount(Node *head,int len);
-int depthcount(Node *head);
-int widthcount(Node *head);
-void printtree(Node *head,int depth,int width);
-char **createmap(int depth,int width);
-void writein(Node *head,char **map,int len);
+void Display(struct node* root, int ident);
+int isVaild(char c);
+
+
+int vec_left[100] = {0};
 
 int main()
 {
     char *s="00001(00002(00003(00004(00005(*)(00009))(00007(*)(00008)))(00006))(*))(00010(00011(00012)(*))(00013(*)(*)))";
     Node *treehead=readin(s);
-    int depth,width;
-    codecount(treehead,0);
-    depth=depthcount(treehead);
-    width=widthcount(treehead);
-    printtree(treehead,depth,width);
+
+    Display(treehead,0);
     return 0;
 }
 
-char **createmap(int depth,int width)
+void Display(struct node* root, int ident)
 {
-    int i,j;
-    char **map=(char **)malloc((depth*2+1)*sizeof(char *));
-    for(i=0;i<depth*2+1;i++)
-    {
-        *(map+i)=(char *)malloc((width*(SIZE+1)-1)*sizeof(char));
-    }
-    for(i=0;i<depth*2+1;i++)
-    {
-        for(j=0;j<width*(SIZE+1)-1;j++)
-        {
-            *(*(map+i)+j)=' ';
-        }
-    }
-    return map;
-}
-
-void printtree(Node *head,int depth,int width)
-{
-    char **map=createmap(depth,width);
-    writein(head,map,0);
-
-
-}
-
-void writein(Node *head,char **map,int len)
-{
-    int i,j;
-    if(len==0)
-    {
-        for(i=0;i<SIZE;i++)
-        {
-            *(*(map+len)+i)=head->c[i];
-        }
-    }
-    if(head->left)
-    {
-        for(i=0;i<SIZE;i++)
-        {
-            *(*(map+2*len+1)+2)='|';
-        }
-    }
-}
-
-int widthcount(Node *head)
-{
-    static int width=1;
-    int temp;
-    if(head!=NULL)
-    {
-        if(head->right!=NULL)
-        {
-            width++;
-        }
-        temp=widthcount(head->left);
-        width=(width<temp)?temp:width;
-        temp=widthcount(head->right);
-        width=(width<temp)?temp:width;
-    }
-    return width;
-}
-
-int depthcount(Node *head)
-{
-    static int max=0;
-    int i,temp=0;
-    if(head!=NULL)
-    {
-        if(head->left==NULL&&head->right==NULL)
-        {
-            for(i=0;i<MAXDEPTH;i++)
-            {
-                if(head->code[i]==LEFT)
-                {
-                    temp++;
-                }
-            }
-            max=(max<temp)?temp:max;
-        }
-        max=depthcount(head->left);
-        max=depthcount(head->right);
-    }
-    return max;
-}
-
-void codecount(Node *head,int len)
-{
-    static int a[MAXDEPTH];
     int i;
-    if(head!=NULL)
+    if(ident > 0)
     {
-        for(i=0;i<MAXDEPTH;i++)
+        for(i = 0; i < ident - 1; ++i)
         {
-            head->code[i]=a[i];
+            printf(vec_left[i] ? "│   " : "    ");
         }
-        a[len]=LEFT;
-        codecount(head->left,len+1);
-        a[len]=RIGHT;
-        codecount(head->right,len+1);
-        a[len]=0;
+        printf(vec_left[ident-1] ? "├── " : "└── ");
     }
+
+    if(!root)
+    {
+        printf("\n");
+        return;
+    }
+
+    for(i=0;isVaild(root->c[i])||i<SIZE;i++)
+    {
+        printf("%c", root->c[i]);
+    }
+    printf("\n");
+    if(!root->left && !root->right)
+    {
+        return;
+    }
+
+    vec_left[ident] = 1;
+    Display(root->right, ident + 1);
+    vec_left[ident] = 0;
+    Display(root->left, ident + 1);
+}
+
+int isVaild(char c)
+{
+    if(c>='0'&&c<='9')
+    {
+        return 1;
+    }
+    return 0;
 }
 
 Node *readin(char *s)
