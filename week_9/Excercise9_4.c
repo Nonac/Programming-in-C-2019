@@ -6,11 +6,14 @@
 #define LEFT 9
 #define RIGHT 8
 #define MAXDEPTH 20
+#define LENGTH 100
+#define WIDTH 100
 
 typedef struct node
 {
     char c[SIZE];
     int code[MAXDEPTH];
+    int depth;
     struct node *left;
     struct node *right;
 }Node;
@@ -22,65 +25,99 @@ void divleaf(char *lefts,char *rights,char *s);
 void copy(char *lefts,char *s,int begin, int end);
 int strlenth(char *s);
 void codecount(Node *head,int len);
-int depthcount(Node *head);
 int widthcount(Node *head);
-void printtree(Node *head,int depth,int width);
-char **createmap(int depth,int width);
+void printtree(Node *head,char array[LENGTH][WIDTH],int i,int j);
 void writein(Node *head,char **map,int len);
+void find_depth(Node *tree_head);
 
 int main()
 {
     char *s="00001(00002(00003(00004(00005(*)(00009))(00007(*)(00008)))(00006))(*))(00010(00011(00012)(*))(00013(*)(*)))";
     Node *treehead=readin(s);
-    int depth,width;
+    int i,j;
+    char map[LENGTH][WIDTH];
     codecount(treehead,0);
-    depth=depthcount(treehead);
-    width=widthcount(treehead);
-    printtree(treehead,depth,width);
+    find_depth(treehead);
+    for(i=0;i<LENGTH;i++){
+        for(j=0;j<WIDTH;j++){
+            map[i][j] = ' ';
+        }
+    }
+    printtree(treehead,map,0,0);
+    for(i=0;i<LENGTH;i++){
+        for(j=0;j<WIDTH;j++){
+            printf("%c",map[i][j]);
+        }
+        printf("\n");
+    }
     return 0;
 }
 
-char **createmap(int depth,int width)
+void find_depth(Node *tree_head)
 {
-    int i,j;
-    char **map=(char **)malloc((depth*2+1)*sizeof(char *));
-    for(i=0;i<depth*2+1;i++)
-    {
-        *(map+i)=(char *)malloc((width*(SIZE+1)-1)*sizeof(char));
+    static depth = 1;
+    if(tree_head == NULL){
+        return;
     }
-    for(i=0;i<depth*2+1;i++)
-    {
-        for(j=0;j<width*(SIZE+1)-1;j++)
-        {
-            *(*(map+i)+j)=' ';
-        }
-    }
-    return map;
+    tree_head->depth = depth;
+    depth++;
+    find_depth(tree_head->left);
+    find_depth(tree_head->right);
+    depth--;
 }
 
-void printtree(Node *head,int depth,int width)
+void printtree(Node *head,char array[LENGTH][WIDTH],int i,int j)
 {
-    char **map=createmap(depth,width);
-    writein(head,map,0);
+    int k= 0;
+    int m = 0;
+    if(head ==NULL){
+        return;
+    }
+    for(k=0;k<SIZE;k++){
+        array[i][j+k] = head->c[k];
+    }
+    if(head->left != NULL){
+        for(k=1;k<10/head->depth;k++){
+            array[i+k][j] = '|';
+        }
+    }
+    if(head->right != NULL){
+        for(k=SIZE;k<SIZE+SIZE;k++){
+            array[i][j+k] = '-';
+        }
+    }
 
-
+    printtree(head->left,array,i+10/head->depth,j);
+    printtree(head->right,array,i,j+10);
 }
 
 void writein(Node *head,char **map,int len)
 {
     int i,j;
-    if(len==0)
+    if(head!=NULL)
     {
         for(i=0;i<SIZE;i++)
         {
-            *(*(map+len)+i)=head->c[i];
+            *(*(map+len*2)+i)=head->c[i];
         }
-    }
-    if(head->left)
-    {
-        for(i=0;i<SIZE;i++)
+        if(head->left)
         {
-            *(*(map+2*len+1)+2)='|';
+            for(i=0;i<SIZE;i++)
+            {
+                *(*(map+2*len+1)+2)='|';
+            }
+        }
+        writein(head->left,map,len+1);
+        if(head->right)
+        {
+            for(i=0;i<SIZE;i++)
+            {
+                *(*(map+2*len)+SIZE)='-';
+            }
+            for(i=0;i<SIZE;i++)
+            {
+                *(*(map+len*2)+i)=head->c[i];
+            }
         }
     }
 }
@@ -103,28 +140,6 @@ int widthcount(Node *head)
     return width;
 }
 
-int depthcount(Node *head)
-{
-    static int max=0;
-    int i,temp=0;
-    if(head!=NULL)
-    {
-        if(head->left==NULL&&head->right==NULL)
-        {
-            for(i=0;i<MAXDEPTH;i++)
-            {
-                if(head->code[i]==LEFT)
-                {
-                    temp++;
-                }
-            }
-            max=(max<temp)?temp:max;
-        }
-        max=depthcount(head->left);
-        max=depthcount(head->right);
-    }
-    return max;
-}
 
 void codecount(Node *head,int len)
 {
