@@ -5,7 +5,7 @@ TARGET = testset
 DTARGET = $(TARGET)_d
 STARGET = $(TARGET)_s
 # Lab machines might not have a recent enough gcc ?
-CC = clang
+CC = gcc
 
 # Build testarr, using all the 'normal' flags
 $(TARGET): set.c set.h arr.c arr.h $(TARGET).c
