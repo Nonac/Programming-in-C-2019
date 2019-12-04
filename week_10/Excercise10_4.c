@@ -29,7 +29,7 @@ int compare(char *a,char *b);
 int main()
 {
     int *prime=(int *)malloc(sizeof(int)*ALPHABET);
-    char *s="eng_370k_shuffle.txt";
+    char *s="/Users/nickyang/CLionProjects/Clion_practise/eng_370k_shuffle.txt";
     char *temp=(char *)calloc(1,MAZSIZE* sizeof(char));
     int begin=getnextprime(ALPHABET);
     Hashmap *hashmap=init(begin);
@@ -190,7 +190,7 @@ Hashmap *resize(Hashmap *hashmap,int *prime)
     }
     if(hashmapnew->curnum!=hashmap->curnum)
     {
-        EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
     return hashmapnew;
 }
