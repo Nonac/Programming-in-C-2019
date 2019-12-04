@@ -29,7 +29,7 @@ int compare(char *a,char *b);
 int main()
 {
     int *prime=(int *)malloc(sizeof(int)*ALPHABET);
-    char *s="ng_370k_shuffle.txt";
+    char *s="eng_370k_shuffle.txt";
     char *temp=(char *)calloc(1,MAZSIZE* sizeof(char));
     int begin=getnextprime(ALPHABET);
     Hashmap *hashmap=init(begin);
@@ -173,17 +173,24 @@ Hashmap *resize(Hashmap *hashmap,int *prime)
 {
     int m=getnextprime(2*hashmap->totalnum);
     Hashmap *hashmapnew=init(m);
-    int i;
+    int i,j;
     int hash;
 
     for(i=0;i<hashmap->totalnum;i++)
     {
         if(hashmap->word[i][0]!='\0')
         {
-            hash=hashcount(hashmapnew,hashmap->word[i],prime,0);
+            j=0;
+            do{
+                hash=hashcount(hashmapnew,hashmap->word[i],prime,j++);
+            }while (hashmapnew->word[hash][0]!='\0');
             copy(hashmapnew->word[hash],hashmap->word[i]);
             hashmapnew->curnum++;
         }
+    }
+    if(hashmapnew->curnum!=hashmap->curnum)
+    {
+        EXIT_FAILURE;
     }
     return hashmapnew;
 }
