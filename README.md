@@ -52,7 +52,7 @@
 	- [x] 3.9 Soundex语音算法【字符串或链表】
 - [x] week_4
 	- [x] Wireworld元胞自动机
-	- [x] ncurses 显示套件
+	- [x] ncurses 显示套件int getnextprime(int n)
 - [x] week_5
 	- [x] 5.1 Anagrams 字谜查找
 	- [ ] 5.2 Anagrams 字谜分组
@@ -85,4 +85,6 @@
 	- [x] 9.3 霍夫曼编码
 	- [x] 9.4 树的打印
 - [x] week_10
-	- [ ] 10.2 抽象数据结构：集合 的基本操作
+	- [x] 10.2 抽象数据结构：集合 的基本操作
+	- [ ] 10.3 多类复用
+	- [x] 10.4 Double Hash
