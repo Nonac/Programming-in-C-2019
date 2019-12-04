@@ -77,7 +77,7 @@ arr* arr_init(int elementsize)
 
 void arr_set(arr *l, int n, void* v)
 {
-    void *p=l->data;
+    char *temp;
     int i;
     if (n < 0){
         ON_ERROR("Array accessed with negative index ...\n");
@@ -91,26 +91,21 @@ void arr_set(arr *l, int n, void* v)
         }
         l->pz = n+1;
     }
-    for(i=0;i<(n-1)*l->elsz+1;i++)
-    {
-       l->data++;
-    }
-    memcpy(l->data,v,l->elsz);
+    temp = (char *) (l->data);
+    temp = temp + n * l->elsz;
+    memcpy((void*) temp, v, l->elsz);
 
 }
 
 void* arr_get(arr *l, int n)
 {
-    int i;
-    void *p=l->data;
+    char *temp;
     if(n >= l->pz || (n < 0)){
         ON_ERROR("Array read out of bounds\n");
     }
-    for(i=0;i<(n-1)*l->elsz+1;i++)
-    {
-        p++;
-    }
-    return p;
+    temp = (char*) (l->data);
+    temp = temp + n * l->elsz;
+    return (void*) temp;
 }
 
 void arr_free(arr **l)
