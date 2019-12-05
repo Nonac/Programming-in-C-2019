@@ -55,7 +55,7 @@
 	- [x] ncurses 显示套件int getnextprime(int n)
 - [x] week_5
 	- [x] 5.1 Anagrams 字谜查找
-	- [ ] 5.2 Anagrams 字谜分组
+	- [x] 5.2 Anagrams 字谜分组(Double Hash)
 	- [x] 5.3 Anagrams 字谜拼合
 	- [x] 5.4 递归求解安卓锁屏方式
 	- [x] 5.5 SDL
