@@ -1,155 +1,134 @@
-#include "mvm.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include<assert.h>
-#define MAXSIZE 100
+#include <assert.h>
 
-/*Init structure, and assert the head.*/
-mvm* mvm_init(void)
+#include "mvm.h"
+
+
+mvm *mvm_init(void)
 {
-    mvm *head=(mvm *)calloc(1, sizeof(mvm));
-    assert(head!=NULL);
-    head->head=NULL;
-    return head;
+    mvm *m = (mvm *)calloc(1,sizeof(mvm));
+    m->head = NULL; /*important!*/
+    m->numkeys = 0;
+    return m;
 }
 
-/* Number of key/value pairs stored 
- * If m is null, return 0.*/
 int mvm_size(mvm* m)
 {
-    if(m==NULL)
-    {
+    if(m == NULL){
         return 0;
     }
     return m->numkeys;
 }
 
-/* Insert one key/value pair 
- * Because insertion must have an O(1) time, 
- * I make a head insert to the list.*/
+/* Insert one key/value pair */
 void mvm_insert(mvm* m, char* key, char* data)
 {
-    mvmcell *p=(mvmcell *)calloc(1, sizeof(mvmcell));
-    if (m == NULL || key == NULL || data == NULL) {
-        free(p);
+    mvmcell *cell = (mvmcell *)calloc(1,sizeof(mvmcell));
+    if(m==NULL||key == NULL||data ==NULL)
+    {
+        free(cell);
         return;
     }
-    p->key=(char *)calloc(1, (strlen(key)+1)* sizeof(char));
-    p->data=(char *)calloc(1, (strlen(data)+1)* sizeof(char));
-    assert(key!=NULL);
-    assert(data!=NULL);
-    strcpy(p->key,key);
-    strcpy(p->data,data);
-    p->next=m->head;
-    m->head=p;
+    cell->key = (char *)calloc(1,sizeof(char)*(strlen(key)+1));
+    cell->data = (char *)calloc(1,sizeof(char)*(strlen(data)+1));
+
+    strcpy(cell->key,key);
+    strcpy(cell->data,data);
+    cell->next = m->head;
+    m->head = cell;
     m->numkeys++;
 }
 
+/* Store list as a string "[key](value) [key](value) " etc.  */
+char* mvm_print(mvm* m)
+{
+    if(m != NULL){
+        mvmcell *temp = m->head;
+        char *str = (char *)calloc(1,sizeof(char));
+        int offset = 0;
+        
+        while(temp != NULL){
+            str = (char *)realloc(str,(strlen(str)+strlen(temp->key)+strlen(temp->data)\
+            +strlen("[]() "))*sizeof(char)+sizeof(char));
+            offset += sprintf(str+offset,"[%s](%s) ",temp->key,temp->data);
 
-/* Return the corresponding value for a key 
- * There is an O(n) time in search function.
- * So I have to search list from begin to end.*/
+            temp = temp->next;
+        }
+        return str;
+    }
+    return  NULL;
+}
+
+/* Remove one key/value */
+void mvm_delete(mvm* m, char* key)
+{
+    if(m!=NULL&& key != NULL){
+        mvmcell *temp = m->head;
+        mvmcell *swap;
+        if(strcmp(temp->key,key)==0){
+
+            m->head = m->head->next;
+            m->numkeys--;
+            free(temp->data);
+            free(temp->key);
+            free(temp);
+            return;
+        }
+        while(temp->next != NULL && strcmp(temp->next->key,key)!=0){ /*cannot exchange*/
+            temp = temp->next;
+        }
+        if(temp->next == NULL){
+            return;
+        }
+        swap = temp->next;
+        temp->next = temp->next->next;
+        free(swap->data);
+        free(swap->key);
+        free(swap);
+        m->numkeys--;
+    }
+}
+
+/* Return the corresponding value for a key */
 char* mvm_search(mvm* m, char* key)
 {
-    mvmcell *p=m->head;
-    while(p!=NULL)/* Remove one key/value */
-    {
-        if(!strcmp(p->key,key))
-        {
-            return p->data;
+    if(m!=NULL&&key!=NULL){
+        mvmcell *temp = m->head;
+
+        while(temp != NULL && strcmp(temp->key,key)!=0 ){/*why???*/
+            temp = temp ->next;
         }
-        p=p->next;
+
+        if(temp == NULL){
+            return NULL;
+        }
+        return temp->data;
     }
-    free(p);
     return NULL;
 }
 
-/* Store list as a string "[key](value) [key](value) " etc.  
- * An O(n) time also in print function.
-*/
-
-char* mvm_print(mvm* m)
-{
-    char *str=(char *)calloc(1,1);
-    char *temp=(char *)calloc(1,MAXSIZE* sizeof(char));
-    mvmcell *p=m->head;
-    while (p!=NULL)
-    {
-        sprintf(temp,"[%s](%s) ",p->key,p->data);
-        str=(char *)realloc(str,(strlen(str)+strlen(temp)+1)* sizeof(char));
-        strcat(str,temp);
-        p=p->next;
-    }
-    free(temp);
-    return str;
-}
-
-/* Remove one key/value 
- * There are two steps in the function:
- * 1. If the first mvmcell is the key we are finding ?
- * 2. If not the first, let us go next.
- * In the way, it gets an O(n) time*/
-void mvm_delete(mvm* m, char* key)
-{
-    mvmcell *p,*cur;
-    if (m == NULL || key == NULL || key[0] == '\0' || mvm_search(m, key) == NULL)
-    {
-        return;
-    }
-    p=m->head;
-    cur=m->head;
-    if(!strcmp(cur->key,key))
-    {
-        m->head=m->head->next;
-        m->numkeys--;
-        free(cur->key);
-        free(cur->data);
-        free(cur);
-        return;
-    }
-    p=p->next;
-    while (p!=NULL)
-    {
-        if(!strcmp(p->key,key))
-        {
-            cur->next=p->next;
-            m->numkeys--;
-            free(p->data);
-            free(p->key);
-            free(p);
-            return;
-        }
-        cur=cur->next;
-        p=p->next;
-    }
-}
-
-/* Return *argv[] list of pointers to all values stored with key, 
- * n is the number of values. 
- * In order to speed up multisearch to find a vaild key from link list,
- * I use search(). If search function find nothing, then return NULL.
- * If search function find one, then let us find others from begin to end.
-*/
-
+/* Return *argv[] list of pointers to all values stored with key, n is the number of values */
 char** mvm_multisearch(mvm* m, char* key, int* n)
 {
-    char **res;
-    int index = 0;
-    mvmcell *temp = m->head;
-    if(m !=NULL&& key!=NULL&& n != NULL)
-    {
+    if(m !=NULL&& key!=NULL&& n != NULL){
+        char **a;
+        int index = 0;
+        mvmcell *temp = m->head;
         *n = 0;
-        res = (char **)malloc(sizeof(char *));
+        a = (char **)malloc(sizeof(char *));
     
         while(temp!=NULL){
             if(strcmp(temp->key,key)==0){
-                res = (char **)realloc(res,(++(*n))* sizeof(char *));
-                res[index++] = temp->data;     
+                (*n)++;
+                a = (char **)realloc(a,(*n)* sizeof(char *));
+                a[index] = temp->data;
+                index ++;      
             }
             temp = temp ->next;
         }
-        return  res;
+        return  a;
     }
     return NULL;
 }
@@ -170,16 +149,16 @@ void free_linked_list(mvmcell **head)
     }
 }
 
-/* Free & set p to NULL from head*/
+/* Free & set p to NULL */
 void mvm_free(mvm** p)
 {
     mvm *a;
-   if( p ==NULL || *p == NULL) {
+    if( p ==NULL || *p == NULL){
         return;
     }
-    a=*p;
-    
+    a = *p;
     free_linked_list(&(a->head));
     free(a);
-    *p=NULL;
+    *p =NULL;
 }
+

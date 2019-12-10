@@ -5,7 +5,7 @@ TESTBASE = homophones
 INCS = mvm.h
 SOURCES =  $(TESTBASE).c mvm.c
 EXECS = $(TESTBASE) $(TESTBASE)_d $(TESTBASE)_s homophone
-CC = gcc
+CC = clang
 
 run: $(TESTBASE)
 	./$(TESTBASE) BOY

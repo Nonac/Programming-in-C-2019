@@ -5,7 +5,7 @@ TESTBASE = testfmvm
 INCS = fmvm.h
 SOURCES =  $(TESTBASE).c fmvm.c
 EXECS = $(TESTBASE) $(TESTBASE)_d $(TESTBASE)_s homophone
-CC = gcc
+CC = clang
 
 run: $(TESTBASE)
 	./$(TESTBASE) 

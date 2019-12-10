@@ -16,7 +16,7 @@
 * And it could print out each multisearch time and totally run time.
 *
 **********************************************************************************************/
-#include "mvm.h"
+#include "fmvm.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,7 +40,7 @@ char *finddata(char *buff,int n);
 /*printout the multisearch result*/
 void printout(mvm *mapsecond,char *key,char *data);
 /*main function*/
-void homophones(char *address,char *key,int n);
+void homophones(char *key,mvm *mapfirst,mvm *mapsecond);
 /*pass apposite parameter to main function*/
 void parameterpassing(int i,int argc,char **argv,int n,char *address);
 /*change -n number to int*/
@@ -49,8 +49,10 @@ void test(char *address);
 
 int main(int argc,char **argv)
 {
+    /*int argc=6;
+    char argv[][MAXBUFF]={" ","-n","4","CHRISTMAS","PROGRAM","PASSING"};*/
     clock_t startTime,endTime;
-    char *address="cmudict.txt";
+    char *address="/home/ff19085/C/week_11/Excercise11_2/cmudict.txt";
     int n=0;
     int i,flag=1;
     test(address);
@@ -125,56 +127,57 @@ int stoint(char *s)
 void parameterpassing(int i,int argc,char **argv,int n,char *address)
 {
     int j,nword;
+    mvm *mapfirst=mvm_init();
+    mvm *mapsecond=mvm_init();
+
     if(i==argc) 
     {
 /*If there is not any -n in argv, n will be the min between 3 and the phones numbers.*/
         n = DEFAULT;
+        readin(mapfirst,mapsecond,address,n);
         for (j = 1; j < argc; j++) 
-	{
-            nword = findphonemes(address, argv[j]);
-            if (nword >= n) 
 	    {
-                homophones(address, argv[j], n);
-            } else 
+            nword = findphonemes(address, argv[j]);
+            if (nword >= n)
+	        {
+                homophones(argv[j],mapfirst,mapsecond);
+            } else
             {
-                homophones(address, argv[j], nword);
+                readin(mapfirst,mapsecond,address,nword);
+                homophones(argv[j],mapfirst,mapsecond);
             }
         }
     } else
     {
 /*If there is a -n, but target word has a less phones, return an ERROR undefined.*/
+        readin(mapfirst,mapsecond,address,n);
         for (j = 1; j < argc; j++) 
         {
             if ((j != i - 1) && (j != i)) 
             {
                 nword = findphonemes(address, argv[j]);
                 if (nword >= n) 
-		{
-                    homophones(address, argv[j], n);
+		        {
+                    homophones(argv[j],mapfirst,mapsecond);
                 } else 
-		{
-                    ON_ERROR("Undefined result, please check the input word.");
+		        {
+                    printf("Undefined result, please check the input word.\n");
                 }
             }
         }
     }
+    /*free the two map*/
+    /*mvm_free(&mapfirst);*/
+    mvm_free(&mapsecond);
 }
 
 /*main function*/
-void homophones(char *address,char *key,int n)
+void homophones(char *key,mvm *mapfirst,mvm *mapsecond)
 {
-
-    char *data;
-    mvm *mapfirst=mvm_init();
-    mvm *mapsecond=mvm_init();
-    readin(mapfirst,mapsecond,address,n);
-    data=(char *)calloc(1, strlen(mvm_search(mapfirst,key))* sizeof(char));
-    data=mvm_search(mapfirst,key);
+    char *data=mvm_search(mapfirst,key);
     printout(mapsecond,key,data);
     printf("\n");
-/*free the two map*/
-    mvm_free(&mapfirst);
-    mvm_free(&mapsecond);
+
     free(data);
 }
 
@@ -193,7 +196,7 @@ void printout(mvm *mapsecond,char *key,char *data)
     endTime = clock();
 /*print the target word and its phones in a formal grammer*/
     sprintf(temp,"%s (%s): ",key,data);
-    str=(char *)realloc(str,(strlen(str)+strlen(temp))* sizeof(char));
+    str=(char *)realloc(str,(strlen(str)+strlen(temp)+1)* sizeof(char));
     strcat(str,temp);
 
 /*print out beauty, if print is greater than line width, find a space and print a \n*/
@@ -220,6 +223,9 @@ void printout(mvm *mapsecond,char *key,char *data)
     printf("\n");
     printf("Total search time is:%fms",(double)(endTime - startTime)*1000 / CLOCKS_PER_SEC);
     printf("\n");
+    free(dataarray);
+    free(str);
+    free(temp);
 }
 /*read in from dictionary and create two maps*/
 void readin(mvm *mapfirst,mvm *mapsecond, char *address,int n)
@@ -238,8 +244,11 @@ void readin(mvm *mapfirst,mvm *mapsecond, char *address,int n)
             data=finddata(buff,n);
             mvm_insert(mapfirst,key,data);
             mvm_insert(mapsecond,data,key);
+            free(key);
+            free(data);
         }
     }
+    free(buff);
 }
 
 /*find data from buff, count the space and '#'*/
@@ -261,6 +270,7 @@ char *finddata(char *buff,int n)
         if(cnt==n)
         {
             data=(char *)calloc(1,(end-p+1)* sizeof(char));
+            /*data=buff+p+1;*/
             memcpy(data,buff+p+1,end-p);
             return data;
         }
@@ -278,6 +288,7 @@ char *findkey(char *buff)
         if(buff[p]=='#')
         {
             key=(char *)calloc(1,(p+1)* sizeof(char));
+            /*key=buff;*/
             memcpy(key,buff,p);
             return key;
         }
@@ -296,6 +307,7 @@ int countspace(char *s)
             cnt++;
         }
     }
+    /*free(s);*/
     return ++cnt;
 }
 
@@ -304,7 +316,7 @@ int countspace(char *s)
 int findphonemes(char *address,char *s)
 {
     FILE *fp;
-    int i;
+    int i,cnt;
     int flag;
     char *buff=(char *)calloc(1,MAXBUFF* sizeof(char));
     fp=fopen(address,"r");
@@ -321,7 +333,9 @@ int findphonemes(char *address,char *s)
         }
         if(i==(int)strlen(s)&&flag&&buff[i]=='#')
         {
-            return countspace(buff);
+            cnt=countspace(buff);
+            free(buff);
+            return cnt;
         }
     }
     ON_ERROR("Can not find in dictionary.");
