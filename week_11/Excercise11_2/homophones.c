@@ -16,7 +16,7 @@
 * And it could print out each multisearch time and totally run time.
 *
 **********************************************************************************************/
-#include "fmvm.h"
+#include "mvm.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,10 +49,8 @@ void test(char *address);
 
 int main(int argc,char **argv)
 {
-    /*int argc=6;
-    char argv[][MAXBUFF]={" ","-n","4","CHRISTMAS","PROGRAM","PASSING"};*/
     clock_t startTime,endTime;
-    char *address="/home/ff19085/C/week_11/Excercise11_2/cmudict.txt";
+    char *address="/home/ff19085/CLionProjects/clion/cmudict.txt";
     int n=0;
     int i,flag=1;
     test(address);
@@ -167,7 +165,7 @@ void parameterpassing(int i,int argc,char **argv,int n,char *address)
         }
     }
     /*free the two map*/
-    /*mvm_free(&mapfirst);*/
+    mvm_free(&mapfirst);
     mvm_free(&mapsecond);
 }
 
@@ -177,8 +175,8 @@ void homophones(char *key,mvm *mapfirst,mvm *mapsecond)
     char *data=mvm_search(mapfirst,key);
     printout(mapsecond,key,data);
     printf("\n");
+    /*free(data);*/
 
-    free(data);
 }
 
 void printout(mvm *mapsecond,char *key,char *data)
@@ -232,7 +230,7 @@ void readin(mvm *mapfirst,mvm *mapsecond, char *address,int n)
 {
     FILE *fp;
     char *buff=(char *)calloc(1,MAXBUFF* sizeof(char));
-    char *key,*data;
+    char *key,*key2,*data,*data2;
     fp=fopen(address,"r");
 
     while (!feof(fp))
@@ -241,11 +239,15 @@ void readin(mvm *mapfirst,mvm *mapsecond, char *address,int n)
         if(countspace(buff)>=n)
         {
             key=findkey(buff);
+            key2=findkey(buff);
             data=finddata(buff,n);
+            data2=finddata(buff,n);
             mvm_insert(mapfirst,key,data);
-            mvm_insert(mapsecond,data,key);
+            mvm_insert(mapsecond,data2,key2);
             free(key);
+            free(key2);
             free(data);
+            free(data2);
         }
     }
     free(buff);

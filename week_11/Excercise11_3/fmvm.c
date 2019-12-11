@@ -11,7 +11,7 @@
 *			For example: add=2*7*7
 *
 *	hash2(countpow):the prime number which belongs to each letter multiphy the lenth weight.
-*			For emample: add=2*37^0+7*37^1+7*7^2
+*			For emample: add=2*37^0+7*37^1+7*37^2
 *	i: 	is for find times, which begin with 0.
 *	m:	is for array total blocks.
 *	the whole hash function is:
@@ -60,6 +60,7 @@ mvm* mvm_init(void)
     mvm *head=(mvm *)calloc(1, sizeof(mvm));
     head->totalblocks=getnextprime(BEGINARRAYSIZE);
     head->head=(mvmcell *)calloc(1,head->totalblocks* sizeof(mvmcell));
+    head->numkeys=0;
     return head;
 }
 
@@ -219,13 +220,18 @@ char** mvm_multisearch(mvm* m, char* key, int* n)
 void mvm_free(mvm** p)
 {
     mvm **a;
+    int i;
     if (p == NULL) {
         return;
     }
     a=p;
-    free((*a)->head->key);
-    free((*a)->head->data);
+    for(i=0;i<(*p)->totalblocks;i++)
+    {
+        free((*a)->head[i].key);
+        free((*a)->head[i].data);
+    }
     free((*a)->head);
+    free((*a));
     *p=NULL;
 }
 
@@ -327,6 +333,8 @@ mvm *resize(mvm *hashmap,int *prime)
     hashmapnew->totalblocks=getnextprime(2*hashmap->totalblocks);
     hashmapnew->head=(mvmcell *)calloc(1,hashmapnew->totalblocks* sizeof(mvmcell));
 
+
+
 /*put elem from old hashmap to new hashmap in a new order*/
     for(i=0;i<hashmap->totalblocks;i++)
     {
@@ -340,9 +348,10 @@ mvm *resize(mvm *hashmap,int *prime)
                     hashmapnew=resize(hashmapnew,prime);
                     i=0;
                 }
-            }while (hashmapnew->head[hash].data!=NULL);
-            hashmapnew->head[hash].key=(char *)calloc(1,(strlen(hashmap->head[i].key+1))* sizeof(char));
-            hashmapnew->head[hash].data=(char *)calloc(1,(strlen(hashmap->head[i].data+1))* sizeof(char));
+            }while (hashmapnew->head[hash].key!=NULL);
+            hashmapnew->head[hash].key=(char *)calloc(1,((int)strlen(hashmap->head[i].key) + 1)* sizeof(char));
+            hashmapnew->head[hash].data=(char *)calloc(1,((int)strlen(hashmap->head[i].data) + 1)* sizeof(char)/*((int)strlen(hashmap->head[i].data+1))* sizeof(char)*/);
+
             memcpy(hashmapnew->head[hash].key,hashmap->head[i].key,strlen(hashmap->head[i].key));
             memcpy(hashmapnew->head[hash].data,hashmap->head[i].data,strlen(hashmap->head[i].data));
             hashmapnew->numkeys++;
@@ -357,15 +366,18 @@ mvm *resize(mvm *hashmap,int *prime)
     hashmap->totalblocks=hashmapnew->totalblocks;
     for(i=0;i<hashmap->totalblocks;i++)
     {
+        free(hashmap->head[i].key);
+        free(hashmap->head[i].data);
         if(hashmapnew->head[i].key!=NULL)
         {
-            hashmap->head[i].key=(char *)calloc(1,(strlen(hashmapnew->head[i].key+1))* sizeof(char));
-            hashmap->head[i].data=(char *)calloc(1,(strlen(hashmapnew->head[i].data+1))* sizeof(char));
+            hashmap->head[i].key=(char *)calloc(1,((int)strlen(hashmapnew->head[i].key)+1)* sizeof(char));
+            hashmap->head[i].data=(char *)calloc(1,((int)strlen(hashmapnew->head[i].data)+1)* sizeof(char));
             memcpy(hashmap->head[i].key,hashmapnew->head[i].key,strlen(hashmapnew->head[i].key));
             memcpy(hashmap->head[i].data,hashmapnew->head[i].data,strlen(hashmapnew->head[i].data));
             hashmap->numkeys++;
         }
     }
+    mvm_free(&hashmapnew);
     return hashmap;
 }
 
