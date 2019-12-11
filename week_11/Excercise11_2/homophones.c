@@ -50,7 +50,7 @@ void test(char *address);
 int main(int argc,char **argv)
 {
     clock_t startTime,endTime;
-    char *address="/home/ff19085/CLionProjects/clion/cmudict.txt";
+    char *address="./cmudict.txt";
     int n=0;
     int i,flag=1;
     test(address);
@@ -100,7 +100,6 @@ void test(char *address)
     assert(stoint("15")==15);
 }
 
-
 /*change -n number to int*/
 int stoint(char *s)
 {
@@ -108,16 +107,15 @@ int stoint(char *s)
     int i,j,p=0;
     for(i=strlen(s);i>=0;i--)
     {
-	if(s[i]>='0'&&s[i]<='9')
-	{
-	    for(j=0;j<p;j++)
+	    if(s[i]>='0'&&s[i]<='9')
 	    {
-	        mul*=DEC;
+	        for(j=0;j<p;j++)
+	        {
+	            mul*=DEC;
+	        }
+	        p++;
+	        res+=mul*(s[i]-'0');
 	    }
-	    p++;
-	    res+=mul*(s[i]-'0');
-	}
-	
     }
     return res;
 }
@@ -175,8 +173,6 @@ void homophones(char *key,mvm *mapfirst,mvm *mapsecond)
     char *data=mvm_search(mapfirst,key);
     printout(mapsecond,key,data);
     printf("\n");
-    /*free(data);*/
-
 }
 
 void printout(mvm *mapsecond,char *key,char *data)
@@ -251,6 +247,7 @@ void readin(mvm *mapfirst,mvm *mapsecond, char *address,int n)
         }
     }
     free(buff);
+    fclose(fp);
 }
 
 /*find data from buff, count the space and '#'*/
@@ -290,7 +287,6 @@ char *findkey(char *buff)
         if(buff[p]=='#')
         {
             key=(char *)calloc(1,(p+1)* sizeof(char));
-            /*key=buff;*/
             memcpy(key,buff,p);
             return key;
         }
@@ -309,7 +305,6 @@ int countspace(char *s)
             cnt++;
         }
     }
-    /*free(s);*/
     return ++cnt;
 }
 
@@ -337,8 +332,10 @@ int findphonemes(char *address,char *s)
         {
             cnt=countspace(buff);
             free(buff);
+            fclose(fp);
             return cnt;
         }
     }
+    fclose(fp);
     ON_ERROR("Can not find in dictionary.");
 }
