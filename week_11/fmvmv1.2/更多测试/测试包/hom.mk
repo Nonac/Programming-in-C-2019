@@ -1,15 +1,16 @@
 CFLAGS = -O2 -Wall -Wextra -Werror -Wfloat-equal -pedantic -ansi
 DFLAGS = -g3 -Wall -Wextra -Werror -Wfloat-equal -pedantic -ansi
 SFLAGS = -g3 -fsanitize=undefined -fsanitize=address
-TESTBASE = testfmvm
+TESTBASE = homophones
 INCS = fmvm.h
 SOURCES =  $(TESTBASE).c fmvm.c
 EXECS = $(TESTBASE) $(TESTBASE)_d $(TESTBASE)_s homophone
 CC = clang
 
-
 run: $(TESTBASE)
-	./$(TESTBASE) 
+	./$(TESTBASE) BOY
+	./$(TESTBASE) -n 3 RHYME
+	./$(TESTBASE) -n 4 CHRISTMAS PROGRAM PASSING
 
 all: $(EXECS)
 
@@ -27,7 +28,7 @@ clean:
 
 memleaks: $(TESTBASE)_d $(TESTBASE)_s
 	@echo "Sanitize :"
-	@./$(TESTBASE)_s
+	@./$(TESTBASE)_s BOY
 	@echo "Valgrind :"
-	@valgrind --leak-check=full ./$(TESTBASE)_d
+	@valgrind --leak-check=full ./$(TESTBASE)_d BOY
 
