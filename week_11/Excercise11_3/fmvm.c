@@ -11,7 +11,7 @@
 *			For example: add=2*7*7
 *
 *	hash2(countpow):the prime number which belongs to each letter multiphy the lenth weight.
-*			For emample: add=2*37^0+7*37^1+7*37^2
+*			For emample: add=2*37*1+7*37*21+7*37*3
 *	i: 	is for find times, which begin with 0.
 *	m:	is for array total blocks.
 *	the whole hash function is:
@@ -23,7 +23,7 @@
 *
 * 	The begin hashmap size is 3, and if load in Excercise11.2,the final size is more than
 *	350,000	with many times resize. With many test, this Algorithm has a search speed
-*	10%-20% faster than link list. But it has a insert speed 30% slower than link list.
+*	 faster than link list, almost 0s. But it has a insert speed largely slower than link list.
 * 4. Shortness need to be improved:
 *	Delete key to null will lead to a situation which search hash jump(in insert;search;
 *	multisearch function) could not continue. That is the reason why I resize hashmap again
@@ -180,6 +180,8 @@ void mvm_delete(mvm* m, char* key)
     }
     while (m->head[hash].key == NULL && flag);
 
+    free(m->head[hash].key);
+    free(m->head[hash].data);
     m->head[hash].key = NULL;
     m->head[hash].data = NULL;
     m->numkeys--;
@@ -188,7 +190,7 @@ void mvm_delete(mvm* m, char* key)
     *	multisearch function) could not continue. That is the reason why I resize hashmap
     *	again at the end of delete function.
     */
-    resize(m, prime);
+    m=resize(m, prime);
     free(prime);
 }
 
@@ -317,7 +319,7 @@ int countpow(char *word, int i, int m)
         temp = 1;
         for (k = 0; k < j; k++)
         {
-            temp *= ALPHABET;
+            temp += ALPHABET;
         }
         res += temp*(uppertolower(word[j]));
     }
@@ -375,12 +377,12 @@ mvm *resize(mvm *hashmap, int *prime)
                 if (j + hashmapnew->numkeys >= hashmapnew->totalblocks)
                 {
                     hashmapnew = resize(hashmapnew, prime);
-                    i = 0;
+                    /*i = 0;*/
                 }
             }
             while (hashmapnew->head[hash].key != NULL);
             hashmapnew->head[hash].key = (char *)calloc(1, ((int)strlen(hashmap->head[i].key) + 1) * sizeof(char));
-            hashmapnew->head[hash].data = (char *)calloc(1, ((int)strlen(hashmap->head[i].data) + 1) * sizeof(char)/*((int)strlen(hashmap->head[i].data+1))* sizeof(char)*/);
+            hashmapnew->head[hash].data = (char *)calloc(1, ((int)strlen(hashmap->head[i].data) + 1) * sizeof(char));
 
             memcpy(hashmapnew->head[hash].key, hashmap->head[i].key, strlen(hashmap->head[i].key));
             memcpy(hashmapnew->head[hash].data, hashmap->head[i].data, strlen(hashmap->head[i].data));

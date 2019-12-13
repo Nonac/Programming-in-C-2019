@@ -7,7 +7,6 @@ SOURCES =  $(TESTBASE).c fmvm.c
 EXECS = $(TESTBASE) $(TESTBASE)_d $(TESTBASE)_s homophone
 CC = clang
 
-
 run: $(TESTBASE)
 	./$(TESTBASE) 
 

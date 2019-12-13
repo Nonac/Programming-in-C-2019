@@ -16,7 +16,7 @@
 * And it could print out each multisearch time and totally run time.
 *
 **********************************************************************************************/
-#include "mvm.h"
+#include "fmvm.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +26,7 @@
 #define PRINTLINEWIDTH 50
 #define DEC 10
 #define DEFAULT 3
+#define DICTIONARY "./cmudict.txt"
 
 /*find out how many phonemes the target word have*/
 int findphonemes(char *address,char *s);
@@ -50,7 +51,7 @@ void test(char *address);
 int main(int argc,char **argv)
 {
     clock_t startTime,endTime;
-    char *address="./cmudict.txt";
+    char *address=DICTIONARY;
     int n=0;
     int i,flag=1;
     test(address);
