@@ -6,7 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/Users/nickyang/CLionProjects/compiler/main.c
+/Users/nickyang/CLionProjects/compiler/nal.c
+nal.h
+/Users/nickyang/CLionProjects/compiler/nal.h
+
+/Users/nickyang/CLionProjects/compiler/nal.h
 stdio.h
+-
+stdlib.h
+-
+string.h
+-
+assert.h
+-
+time.h
 -
 

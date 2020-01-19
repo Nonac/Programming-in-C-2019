@@ -1,0 +1,4 @@
+ Begin debug >>>
+ { 
+ 
+ PRINT "Hello World! From test1"

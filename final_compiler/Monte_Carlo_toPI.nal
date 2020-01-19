@@ -1,0 +1,21 @@
+{
+    PRINTN "Please enter a loop time:"
+    INNUM ( %TIME )
+    %CNT = 0
+    %IN = 0
+    RND ( %X )
+    RND ( %Y )
+    %X = %X / 100 ;
+    %Y = %Y / 100 ;
+    %Z = %X * %X + %Y * %Y ;
+    IFGREATER ( 1 , %Z ){
+        INC ( %IN )
+    }
+    INC ( %CNT )
+    IFGREATER ( %TIME , %CNT ) {
+        JUMP 13
+    }
+    PRINTN "Pi is :"
+    %RES = 4 * %IN / %TIME ;
+    PRINT %RES
+}

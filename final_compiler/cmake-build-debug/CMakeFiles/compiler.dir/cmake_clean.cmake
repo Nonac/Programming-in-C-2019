@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/compiler.dir/main.c.o"
+  "CMakeFiles/compiler.dir/nal.c.o"
   "compiler"
   "compiler.pdb"
 )

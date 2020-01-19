@@ -17,8 +17,7 @@ parse_s : $(BASE).c $(BASE).h
 parse_d : $(BASE).c $(BASE).h
 	$(CC) $(BASE).c $(DFLAGS) -o $@
 
-# I #define INTERP (via this makefile) so that only the extra code for
-# the interpreter is inside #ifdef INTERP / #endif 'brackets'
+
 interp : $(BASE).c $(BASE).h
 	$(CC) $(BASE).c $(CFLAGS) -o $@ -D INTERPRET
 interp_s : $(BASE).c $(BASE).h

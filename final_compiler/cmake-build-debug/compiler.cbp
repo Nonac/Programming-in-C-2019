@@ -78,7 +78,10 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/nickyang/CLionProjects/compiler/main.c">
+		<Unit filename="/Users/nickyang/CLionProjects/compiler/nal.c">
+			<Option target="compiler"/>
+		</Unit>
+		<Unit filename="/Users/nickyang/CLionProjects/compiler/nal.h">
 			<Option target="compiler"/>
 		</Unit>
 		<Unit filename="/Users/nickyang/CLionProjects/compiler/CMakeLists.txt">
