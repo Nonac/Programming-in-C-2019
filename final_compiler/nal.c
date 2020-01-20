@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
     srand((unsigned)time(NULL));
+    test();
 
     lexeme=lexicalAnalysis(argv[1],lexeme);
     grammarCheck(lexeme,argv[1],table);
@@ -25,6 +26,27 @@ int main(int argc, char *argv[])
     table_free(&table);
     mvm_free(&lexeme);
     return 0;
+}
+
+void test(void)
+{
+    assert(symbolMatch("IFEQUAL")==NAL_IFEQUAL);
+    assert(symbolMatch("FILE")==NAL_FILE);
+    assert(symbolMatch("PRINT")==NAL_PRINT);
+    assert(symbolMatch("PRINTN")==NAL_PRINTN);
+    assert(symbolMatch("RND")==NAL_RND);
+    assert(symbolMatch("INC")==NAL_INC);
+    assert(symbolMatch("INNUM")==NAL_INNUM);
+    assert(symbolMatch("IN2STR")==NAL_IN2STR);
+    assert(symbolMatch("IFGREATER")==NAL_IFGREATER);
+    assert(symbolMatch("JUMP")==NAL_JUMP);
+    assert(symbolMatch("ABORT")==NAL_ABORT);
+    assert(symbolMatch("INNUM")==NAL_INNUM);
+    assert(symbolMatch("IN2STR")==NAL_IN2STR);
+    assert(ifGreaterIsVaild("1","2")==0);
+    assert(ifGreaterIsVaild("2","1")==1);
+    assert(decimalTest("3.0000001")==1);
+    assert(decimalTest("3.0000000")==0);
 }
 
 mvm *lexicalAnalysis(char *argv,mvm *lexeme)
@@ -75,9 +97,7 @@ void movePointer(mvmcell **p,char *filename)
     if((*p)->next!=NULL)
     {
         *p=(*p)->next;
-    }/* else{
-        ERROR("Missing statement.",filename)
-    }*/
+    }
 }
 
 void program(mvmcell **p,char *filename,Table *table,mvm *lexeme)
@@ -133,7 +153,7 @@ void instruct(mvmcell **p,char *filename,Table *table,mvmcell *head,mvm *lexeme,
             ifCond(p,filename,NAL_IFEQUAL,table,head,lexeme,st);
             return;
         case NAL_JUMP:
-            jump(p,filename,head);
+            jump(p,filename,head,lexeme->numkeys);
             return;
         case NAL_FILE:
             file(p,filename,table);
@@ -153,6 +173,7 @@ void instruct(mvmcell **p,char *filename,Table *table,mvmcell *head,mvm *lexeme,
                 freeStack(st);
                 table_free(&table);
                 mvm_free(&lexeme);
+                printf("Interpreted OK\n");
                 exit(0);
             } else{
                 return;
@@ -425,7 +446,7 @@ void file(mvmcell **p,char *filename,Table *table)
 
 }
 
-void jump(mvmcell **p,char *filename,mvmcell *head)
+void jump(mvmcell **p,char *filename,mvmcell *head,int n)
 {
     int cnt,i;
     movePointer(p,filename);
@@ -434,7 +455,7 @@ void jump(mvmcell **p,char *filename,mvmcell *head)
         if(INTERPRET)
         {
             cnt=atoi((*p)->data);
-            if(cnt==0)
+            if(cnt>=n)
             {
                 ERROR("Invalid JUMP parameter",filename)
             }
@@ -489,7 +510,7 @@ void ifCond(mvmcell **p,char *filename,Symbol logic,Table *table,mvmcell *head,m
     movePointer(p,filename);
     if(INTERPRET)
     {
-        if(ifVarIsVaild(var1,var2,logic))
+        if(ifVarIsVaild(var1,var2,logic,filename))
         {
             value1=getValue(var1,table,filename);
             value2=getValue(var2,table,filename);
@@ -511,7 +532,7 @@ void ifCond(mvmcell **p,char *filename,Symbol logic,Table *table,mvmcell *head,m
                 }
             }
         } else{
-            ERROR("Uncomparable variables",filename)
+            ERROR("Uncomparable various in IFGREATER",filename)
         }
     } else{
         instrs(p,filename,table,1,head,lexeme,st);
@@ -547,26 +568,26 @@ char *getValue(mvmcell *var,Table *table,char *filename)
     }
 }
 
-int ifVarIsVaild(mvmcell *var1,mvmcell *var2,Symbol logic)
+int ifVarIsVaild(mvmcell *var1,mvmcell *var2,Symbol logic,char *filename)
 {
     if(logic==NAL_IFEQUAL)
     {
         if((var1->key==NAL_STRVAR||var1->key==NAL_STRCON)&&\
         (var2->key==NAL_NUMVAR||var2->key==NAL_NUMCON))
         {
-            return 0;
+            ERROR("Uncomparable various in IFEQUAL",filename)
         }
         else if((var2->key==NAL_STRVAR||var2->key==NAL_STRCON)&&\
         (var1->key==NAL_NUMVAR||var1->key==NAL_NUMCON))
         {
-            return 0;
+            ERROR("Uncomparable various in IFEQUAL",filename)
         }
     } else if(logic==NAL_IFGREATER)
     {
         if(var1->key==NAL_STRVAR||var1->key==NAL_STRCON||\
         var2->key==NAL_STRVAR||var2->key==NAL_STRCON)
         {
-            return 0;
+            ERROR("Uncomparable various in IFGREATER",filename)
         }
     }
     return 1;
@@ -587,7 +608,7 @@ void set(mvmcell  **p,char *filename,Table *table)
             {
                 if(property==NAL_NUMVAR)
                 {
-                    ERROR("Unexpected set assign property",filename)
+                    ERROR("Unexpected various in set grammar",filename)
                 } else{
                     data=((*p)->key==NAL_STRVAR)?table_search(table,(*p)->data,property):\
                     (*p)->data;
@@ -625,7 +646,7 @@ void set(mvmcell  **p,char *filename,Table *table)
             {
                 if(property==NAL_STRVAR)
                 {
-                    ERROR("Unexpected set assign property",filename)
+                    ERROR("Unexpected various in set grammar",filename)
                 } else{
                     data=((*p)->key==NAL_NUMVAR)?table_search(table,(*p)->data,property):\
                     (*p)->data;
@@ -649,7 +670,7 @@ void set(mvmcell  **p,char *filename,Table *table)
 char *calculator(mvmcell *start,mvmcell *end,char *filename,Table *table)
 {
     mvm *RPN=mvm_init();
-    double x,y,n;
+    double x,y;
     mvmcell *p;
     mvmcell a,b,c,result;
     StackMvm s;
@@ -702,7 +723,6 @@ char *calculator(mvmcell *start,mvmcell *end,char *filename,Table *table)
                 x=getData(a,table,filename);
                 y=getData(b,table,filename);
                 c.key=NAL_NUMCON;
-                n=x/y;
                 c.data=(char *)calloc(1,MAX_TOKEN_SIZE* sizeof(char));
                 int2string(x/y,c.data);
                 pushMvmcell(&s,c);
