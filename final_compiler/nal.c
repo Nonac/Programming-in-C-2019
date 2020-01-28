@@ -49,6 +49,7 @@ void test(void)
     assert(decimalTest("3.0000000")==0);
 }
 
+/*generate lexeme flow by token*/
 mvm *lexicalAnalysis(char *argv,mvm *lexeme)
 {
     Symbol token;
@@ -58,6 +59,7 @@ mvm *lexicalAnalysis(char *argv,mvm *lexeme)
     while (!feof(fp))
     {
         word=(char *)calloc(1,MAX_TOKEN_SIZE* sizeof(char));
+        /*get next token*/
         token=nextToken(fp,&word,argv);
         if(token!=NAL_UNDEFINE&&token!=NAL_NEWLINE&&token!=NAL_SPACE)
         {
@@ -78,6 +80,7 @@ mvm *lexicalAnalysis(char *argv,mvm *lexeme)
     return lexeme;
 }
 
+/*main structure to parse and grammar checker*/
 void grammarCheck(mvm *lexeme,char *filename,Table *table)
 {
     mvmcell *p=lexeme->head;
@@ -88,6 +91,7 @@ void grammarCheck(mvm *lexeme,char *filename,Table *table)
     program(&p,filename,table,lexeme);
 }
 
+/*move to next token in link*/
 void movePointer(mvmcell **p,char *filename)
 {
     if((*p)==NULL)
@@ -100,6 +104,7 @@ void movePointer(mvmcell **p,char *filename)
     }
 }
 
+/*start of program*/
 void program(mvmcell **p,char *filename,Table *table,mvm *lexeme)
 {
     mvmcell *head=(*p);
@@ -115,6 +120,7 @@ void program(mvmcell **p,char *filename,Table *table,mvm *lexeme)
     freeStack(&st);
 }
 
+/*main structure of recursive*/
 void instrs(mvmcell **p,char *filename,Table *table,int flag,mvmcell *head,mvm *lexeme,Stack *st)
 {
     Symbol ch;
@@ -134,6 +140,7 @@ void instrs(mvmcell **p,char *filename,Table *table,int flag,mvmcell *head,mvm *
     instrs(p,filename,table,flag,head,lexeme,st);
 }
 
+/*token match to every command in grammar*/
 void instruct(mvmcell **p,char *filename,Table *table,mvmcell *head,mvm *lexeme,Stack *st)
 {
     switch ((*p)->key){
@@ -192,6 +199,7 @@ void instruct(mvmcell **p,char *filename,Table *table,mvmcell *head,mvm *lexeme,
     }
 }
 
+/*Function IN2STR*/
 void in2str(mvmcell **p,char *filename,Table *table)
 {
     Symbol property1,property2;
@@ -249,6 +257,7 @@ void in2str(mvmcell **p,char *filename,Table *table)
     }
 }
 
+/*Function INNMU*/
 void innum(mvmcell **p,char *filename,Table *table)
 {
     double n;
@@ -287,6 +296,7 @@ void innum(mvmcell **p,char *filename,Table *table)
     }
 }
 
+/*Function INC*/
 void inc(mvmcell **p,char *filename,Table *table)
 {
     double n;
@@ -326,6 +336,7 @@ void inc(mvmcell **p,char *filename,Table *table)
     }
 }
 
+/*Function RND*/
 void rnd(mvmcell **p,char *filename,Table *table)
 {
     double n=(double)(rand()%RANDOM_MAX);
@@ -359,6 +370,7 @@ void rnd(mvmcell **p,char *filename,Table *table)
     }
 }
 
+/*change int to string to keep in table*/
 void int2string(double slope,char *buffer)
 {
     int temp,i,j,len;
@@ -413,6 +425,7 @@ void int2string(double slope,char *buffer)
     buffer[strlen(buffer)-1] = '\0';
 }
 
+/*Function FILE*/
 void file(mvmcell **p,char *filename,Table *table)
 {
     static char openedfile[MAX_TOKEN_SIZE];
@@ -446,6 +459,7 @@ void file(mvmcell **p,char *filename,Table *table)
 
 }
 
+/*Function JUMP*/
 void jump(mvmcell **p,char *filename,mvmcell *head,int n)
 {
     int cnt,i;
@@ -471,6 +485,7 @@ void jump(mvmcell **p,char *filename,mvmcell *head,int n)
     ERROR("No NUMCON in JUMP statement ?",filename)
 }
 
+/*Function IFCOND*/
 void ifCond(mvmcell **p,char *filename,Symbol logic,Table *table,mvmcell *head,mvm *lexeme, Stack *st)
 {
     mvmcell *var1,*var2;
@@ -539,6 +554,7 @@ void ifCond(mvmcell **p,char *filename,Symbol logic,Table *table,mvmcell *head,m
     }
 }
 
+/*if IFGREATER should work*/
 int ifGreaterIsVaild(char *value1,char *value2)
 {
     double a=atof(value1);
@@ -551,6 +567,7 @@ int ifGreaterIsVaild(char *value1,char *value2)
     }
 }
 
+/*get value in various table*/
 char *getValue(mvmcell *var,Table *table,char *filename)
 {
     char *value;
@@ -568,6 +585,7 @@ char *getValue(mvmcell *var,Table *table,char *filename)
     }
 }
 
+/*to check various in IF command*/
 int ifVarIsVaild(mvmcell *var1,mvmcell *var2,Symbol logic,char *filename)
 {
     if(logic==NAL_IFEQUAL)
@@ -593,6 +611,7 @@ int ifVarIsVaild(mvmcell *var1,mvmcell *var2,Symbol logic,char *filename)
     return 1;
 }
 
+/*Function SET*/
 void set(mvmcell  **p,char *filename,Table *table)
 {
     mvmcell *endTest;
@@ -667,6 +686,7 @@ void set(mvmcell  **p,char *filename,Table *table)
     ERROR("Unexpected set grammar.",filename)
 }
 
+/*main part in calculator, to calculate from Reverse Polish notation*/
 char *calculator(mvmcell *start,mvmcell *end,char *filename,Table *table)
 {
     mvm *RPN=mvm_init();
@@ -738,6 +758,7 @@ char *calculator(mvmcell *start,mvmcell *end,char *filename,Table *table)
     return result.data;
 }
 
+/*get various data from table*/
 double getData(mvmcell a, Table *table, char *filename)
 {
     char *res;
@@ -757,6 +778,7 @@ double getData(mvmcell a, Table *table, char *filename)
     }
 }
 
+/*change math expression to Reverse Polish notation*/
 void toRPN(mvm **RPN, mvmcell *start,mvmcell *end)
 {
     StackMvm s;
@@ -814,6 +836,7 @@ void toRPN(mvm **RPN, mvmcell *start,mvmcell *end)
     freeStackMvmcell(&s);
 }
 
+/*check if it is a math expression by find a ";"*/
 int mathExpression(mvmcell **endTest,char *filename)
 {
     int num_var=0;
@@ -843,6 +866,7 @@ int mathExpression(mvmcell **endTest,char *filename)
     return num_var==num_operand+1?1:0;
 }
 
+/*Function PRINT/PRINTN*/
 void print(mvmcell **p,char *filename,Table *table,Symbol flag)
 {
     char *data;
@@ -885,6 +909,7 @@ void print(mvmcell **p,char *filename,Table *table,Symbol flag)
     ERROR("Unexpected print grammar.",filename)
 }
 
+/*print the main part for double type*/
 void putsWithoutDecimal(char *data)
 {
     int i,len=strlen(data);
@@ -894,6 +919,9 @@ void putsWithoutDecimal(char *data)
     }
 }
 
+/*to check decimal part in double type,
+ * if the various value is 3.00000000,
+ * only print 3*/
 int decimalTest(char *data)
 {
     int i,len=strlen(data);
@@ -904,7 +932,7 @@ int decimalTest(char *data)
         {
             flag=1;
         }
-        if(flag==1&&data[i]!='0'&data[i]!='.')
+        if(flag==1&&data[i]!='0'&&data[i]!='.')
         {
             digit=1;
         }
@@ -912,6 +940,7 @@ int decimalTest(char *data)
     return digit;
 }
 
+/*Using stack to check parentheses and brace*/
 int validParentheses(mvm *lexeme)
 {
     Symbol ch;
@@ -955,6 +984,7 @@ int validParentheses(mvm *lexeme)
     }
 }
 
+/*get next token*/
 Symbol nextToken(FILE *fp,char **word,char *filename)
 {
     int ch;
@@ -1032,6 +1062,7 @@ Symbol nextToken(FILE *fp,char **word,char *filename)
     return NAL_UNDEFINE;
 }
 
+/*match token to symbol in grammar*/
 Symbol symbolMatch(char *word)
 {
 
@@ -1082,6 +1113,7 @@ Symbol symbolMatch(char *word)
     return NAL_UNDEFINE;
 }
 
+/*get word and string in words flow*/
 char *getWord(int ch, FILE *fp,char *word)
 {
     int i=0;
@@ -1097,6 +1129,7 @@ char *getWord(int ch, FILE *fp,char *word)
     return word;
 }
 
+/*get word and string in words flow*/
 char *getString(int ch,FILE *fp,char *word,char *filename)
 {
     int i=0,len=0;
@@ -1121,6 +1154,7 @@ char *getString(int ch,FILE *fp,char *word,char *filename)
     return word;
 }
 
+/*change ROT18 code to normal order letter*/
 char *rotchange(char *word)
 {
     int i,len=strlen(word);
@@ -1146,7 +1180,7 @@ char *rotchange(char *word)
     return word;
 }
 
-
+/*create token flow*/
 mvm* mvm_init(void)
 {
     mvm *head=(mvm *)calloc(1, sizeof(mvm));
@@ -1154,7 +1188,7 @@ mvm* mvm_init(void)
     head->head=NULL;
     return head;
 }
-
+/*free token flow*/
 void mvm_free(mvm** p)
 {
     mvm *a;
@@ -1168,6 +1202,7 @@ void mvm_free(mvm** p)
     *p=NULL;
 }
 
+/*free token flow*/
 void free_linked_list(mvmcell **head)
 {
     if(head !=NULL){
@@ -1183,6 +1218,7 @@ void free_linked_list(mvmcell **head)
     }
 }
 
+/*Insert token to token flow*/
 void mvm_insert(mvm* m, Symbol key, char* data)
 {
     mvmcell *p=(mvmcell *)calloc(1, sizeof(mvmcell));
@@ -1212,6 +1248,7 @@ void mvm_insert(mvm* m, Symbol key, char* data)
     m->numkeys++;
 }
 
+/*various stack to calculator*/
 void initMvmcellStack(StackMvm *s_mvm)
 {
     s_mvm->base=(mvmcell *)malloc(STACK_INIT_SIZE *sizeof(mvmcell));
@@ -1220,6 +1257,7 @@ void initMvmcellStack(StackMvm *s_mvm)
     s_mvm->stacklen=STACK_INIT_SIZE;
 }
 
+/*Push to stack to calculator*/
 void pushMvmcell(StackMvm *s_mvm,mvmcell e)
 {
     if(s_mvm->top-s_mvm->base>=s_mvm->stacklen)
@@ -1231,22 +1269,26 @@ void pushMvmcell(StackMvm *s_mvm,mvmcell e)
     s_mvm->top++;
 }
 
+/*Pop to stack to calculator*/
 void popMvmcell(StackMvm *s,mvmcell *e)
 {
     if(s->base==s->top) return;
     *e=*--(s->top);
 }
 
+/*the deep fo stack*/
 int StackLenMvmcell(StackMvm s)
 {
     return (s.top-s.base);
 }
 
+/*free the stack*/
 void freeStackMvmcell(StackMvm *s)
 {
     free(s->base);
 }
 
+/*token flow stack to check Parentheses*/
 void initStack(Stack *s)
 {
     s->base=(Symbol *)malloc(STACK_INIT_SIZE *sizeof(Symbol));
@@ -1255,6 +1297,7 @@ void initStack(Stack *s)
     s->stacklen=STACK_INIT_SIZE;
 }
 
+/*push to the stack*/
 void push(Stack *s,Symbol e)
 {
     if(s->top-s->base>=s->stacklen)
@@ -1266,22 +1309,26 @@ void push(Stack *s,Symbol e)
     s->top++;
 }
 
+/*pop to the stack*/
 void pop(Stack *s,Symbol *e)
 {
     if(s->base==s->top) return;
     *e=*--(s->top);
 }
 
+/*the deep of stack*/
 int StackLen(Stack s)
 {
     return (s.top-s.base);
 }
 
+/*free the stack*/
 void freeStack(Stack *s)
 {
     free(s->base);
 }
 
+/*various table to keep various, search various and update new value*/
 Table *table_init(void)
 {
     Table *head=(Table *)calloc(1, sizeof(mvm));
@@ -1290,6 +1337,7 @@ Table *table_init(void)
     return head;
 }
 
+/*insert various to table*/
 void table_insert(Table * m, char* key, char* data,Symbol property)
 {
     Node *p=(Node *)calloc(1, sizeof(Node));
@@ -1309,6 +1357,7 @@ void table_insert(Table * m, char* key, char* data,Symbol property)
     m->numkeys++;
 }
 
+/*find various in table*/
 char* table_search(Table * m, char* key,Symbol property)
 {
     Node *p;
@@ -1323,6 +1372,7 @@ char* table_search(Table * m, char* key,Symbol property)
     return NULL;
 }
 
+/*free table*/
 void free_table_linked_list(Node **head)
 {
     if(head !=NULL){
@@ -1339,7 +1389,7 @@ void free_table_linked_list(Node **head)
     }
 }
 
-/* Free & set p to NULL from head*/
+/*free table*/
 void table_free(Table ** p)
 {
     Table *a;
@@ -1353,6 +1403,7 @@ void table_free(Table ** p)
     *p=NULL;
 }
 
+/*update the value in table*/
 void tableUpdate(Table *table, char *key, char *data, Symbol property)
 {
     Node *p;

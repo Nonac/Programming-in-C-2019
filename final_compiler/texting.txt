@@ -1,23 +1,34 @@
 additional_test:
 
 make -f additional_test.mk test
+    #test1 is to test interpret how to deal with unexpect token.
+    #test2 and test3 is to test parentheses and braces is valid.
+    #test4,test5,test6 is to check IN2STR grammar.
+    #test7,test8 is to check grammar in function INNUM.
+    #test9,10,11 is to check function INC grammar.
+    #test12,13 is to check function RND grammar.
+    #test14 is to check function FILE grammar.
+    #test15,16 is to check function JUMP grammar.
+    #test17-24 is to check IFEQUAL and IFGREATER grammar.
+    #test25,26 is to check SET grammar.
+    #test27-29 is to check function PRINT/PRINTN grammar.
+    #test30-31 is to check calculator grammar.
 
-#test1 is to test interpret how to deal with unexpect token.
-#test2 and test3 is to test parentheses and braces is valid.
-#test4,test5,test6 is to check IN2STR grammar.
-#test7,test8 is to check grammar in function INNUM.
-#test9,10,11 is to check function INC grammar.
-#test12,13 is to check function RND grammar.
-#test14 is to check function FILE grammar.
-#test15,16 is to check function JUMP grammar.
-#test17-24 is to check IFEQUAL and IFGREATER grammar.
-#test25,26 is to check SET grammar.
-#test27-29 is to check function PRINT/PRINTN grammar.
-#test30-31 is to check calculator grammar.
+
+make -f nal.mk test0
+    #test0 is to test every command is working well
+
 
 make -f nal.mk runpi
+    #test/Monte_Carlo_toPI.nal is to check every command is working well
 
-#test/Monte_Carlo_toPI.nal is to check every command is working well
+make -f nal.mk test
+    to base test given by neill
+
+make -f nal.mk runescape211
+    to run escape211
+
+
 By use the math expression, I write a Monte Carlo Method to calculate PI, in file
 test/Monte_Carlo_toPI.nal.
 Unfortunately, because recursive bottom edge will lead to a stack overflow in limited

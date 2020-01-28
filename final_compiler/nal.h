@@ -26,15 +26,22 @@
  * What I do in extension part is I create sample math calculator by using math
  * expression. The grammar like this:
  * <MATH SET>:= <NUMVAR> = <MATH EXPRESSION> ";"
- * <MATH EXPRESSION>:= <NUMVAR>|<NUMCON>|"+"|"-"|"*"|"/"|"("|")"
+ * <MATH EXPRESSION>:= <NUMVAR>|<NUMCON>
+ *                  |<MATH EXPRESSION> "+" <MATH EXPRESSION>
+ *                  |<MATH EXPRESSION> "-" <MATH EXPRESSION>
+ *                  |<MATH EXPRESSION> "*" <MATH EXPRESSION>
+ *                  |<MATH EXPRESSION> "/" <MATH EXPRESSION>
+ *                  |<MATH EXPRESSION> "(" <MATH EXPRESSION>
+ *                  |<MATH EXPRESSION> ")" <MATH EXPRESSION>
+ *
  * Emp:     %A = %B + %C * ( %D - 1 ) / 2 ;
  * More details in extension.txt
  *
  * ********************************************************************************/
 #ifdef INTERPRET
-    #define INTERPRET 0
-#else
     #define INTERPRET 1
+#else
+    #define INTERPRET 0
 #endif
 #include <stdio.h>
 #include <stdlib.h>
@@ -155,14 +162,23 @@ void program(mvmcell **p,char *filename,Table *table,mvm *lexeme);
 void instrs(mvmcell **p,char *filename,Table *table,int flag,mvmcell *head,mvm *lexeme,Stack *st);
 /*token match to every command in grammar*/
 void instruct(mvmcell **p,char *filename,Table *table,mvmcell *head,mvm *lexeme,Stack *st);
+/*Function PRINT/PRINTN*/
 void print(mvmcell **p,char *filename,Table *table,Symbol flag);
+/*Function SET*/
 void set(mvmcell **p,char *filename,Table *table);
+/*Function IFCOND*/
 void ifCond(mvmcell **p,char *filename,Symbol logic,Table *table,mvmcell *head,mvm *lexeme, Stack *st);
+/*Function JUMP*/
 void jump(mvmcell **p,char *filename,mvmcell *head,int n);
+/*Function FILE*/
 void file(mvmcell **p,char *filename,Table *table);
+/*Function RND*/
 void rnd(mvmcell **p,char *filename,Table *table);
+/*Function INC*/
 void inc(mvmcell **p,char *filename,Table *table);
+/*Function INNMU*/
 void innum(mvmcell **p,char *filename,Table *table);
+/*Function IN2STR*/
 void in2str(mvmcell **p,char *filename,Table *table);
 
 /*function using in interpret process*/
@@ -197,30 +213,47 @@ double getData(mvmcell a, Table *table, char *filename);
 
 /*create token flow*/
 mvm* mvm_init(void);
+/*free token flow*/
 void mvm_free(mvm** p);
+/*free token flow*/
 void free_linked_list(mvmcell **head);
+/*Insert token to token flow*/
 void mvm_insert(mvm* m, Symbol key, char* data);
 
 /*token flow stack to check Parentheses*/
 void initStack(Stack *s);
+/*push to the stack*/
 void push(Stack *s,Symbol e);
+/*pop to the stack*/
 void pop(Stack *s,Symbol *e);
+/*free the stack*/
 void freeStack(Stack *s);
+/*the deep of stack*/
 int StackLen(Stack s);
 
-/*various stack to calculator*/
+
+/*free the stack*/
 void freeStackMvmcell(StackMvm *s);
+/*the deep of stack*/
 int StackLenMvmcell(StackMvm s);
+/*Pop to stack to calculator*/
 void popMvmcell(StackMvm *s,mvmcell *e);
+/*Push to stack to calculator*/
 void pushMvmcell(StackMvm *s_mvm,mvmcell e);
+/*various stack to calculator*/
 void initMvmcellStack(StackMvm *s_mvm);
 
 /*various table to keep various, search various and update new value*/
 Table *table_init(void);
+/*insert various to table*/
 void table_insert(Table * m, char* key, char* data,Symbol property);
+/*free table*/
 void table_free(Table ** p);
+/*find various in table*/
 char* table_search(Table * m, char* key,Symbol property);
+/*free table*/
 void free_table_linked_list(Node **head);
+/*update the value in table*/
 void tableUpdate(Table *table, char *key, char *data,Symbol property);
 
 void test(void);

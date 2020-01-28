@@ -1,0 +1,45 @@
+{
+    PRINTN "Please enter HELLO WORLD:"
+
+    IN2STR ( $A , $B )
+    IFEQUAL ( $A , "HELLO" ) {
+        IFEQUAL ( $B , "WORLD" ) {
+            PRINTN "The words you enter in is:"
+            PRINTN $A
+            PRINT $B
+        }
+    }
+
+    PRINT #URYYB JBEYQ va EBG63#
+
+    PRINTN "Please enter a number:"
+    INNUM ( %C )
+    PRINTN "The number you enter in is:"
+    PRINT %C
+    INC ( %C )
+    PRINTN "The number add 1 is:"
+    PRINT %C
+
+    RND ( %D )
+    PRINTN "RND a number is:"
+    PRINT %D
+
+    IFEQUAL ( %C , %D ) {
+        PRINTN "The two number is equal."
+    }
+    IFGREATER ( %C , %D ) {
+        PRINTN %C
+        PRINTN " is greater."
+    }
+    IFGREATER ( %D , %C ) {
+            PRINTN %D
+            PRINTN "is greater."
+    }
+
+    PRINTN "Enter in a number greater than 5 to get in JUMP loop:"
+    INNUM ( %E )
+    IFGREATER ( %E , 5 ) {
+        JUMP 93
+    }
+    PRINT "This is the end of test."
+}

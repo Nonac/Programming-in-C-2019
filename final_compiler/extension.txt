@@ -2,7 +2,13 @@ What I do in extension part is I create sample math calculator by using math
 expression. The grammar like this:
 
 <MATH SET>:= <NUMVAR> = <MATH EXPRESSION> ";"
-<MATH EXPRESSION>:= <NUMVAR>|<NUMCON>|"+"|"-"|"*"|"/"|"("|")"
+<MATH EXPRESSION>:= <NUMVAR>|<NUMCON>
+                    |<MATH EXPRESSION> "+" <MATH EXPRESSION>
+                    |<MATH EXPRESSION> "-" <MATH EXPRESSION>
+                    |<MATH EXPRESSION> "*" <MATH EXPRESSION>
+                    |<MATH EXPRESSION> "/" <MATH EXPRESSION>
+                    |<MATH EXPRESSION> "(" <MATH EXPRESSION>
+                    |<MATH EXPRESSION> ")" <MATH EXPRESSION>
 
 Emp:     %A = %B + %C * ( %D - 1 ) / 2 ;
 
