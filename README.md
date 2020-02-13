@@ -1,22 +1,22 @@
-##COMSM1201_2019_TB-1: Programming in C 2019
+# COMSM1201_2019_TB-1: Programming in C 2019
 =================================
-####Compiler flag:
+## Compiler flag:
 -pedantic -Wall -Wextra -Wfloat-equal -ansi -O2
 -lm
 
 ---
-###Update note:
+## Update note:
 ---
-####Unfinish: 5.2 debug
+## Unfinish: 5.2 debug
 ---
-####Undo:
+## Undo:
 
 ---
-####Force on:
+## Force on:
 
 ---
 
-###Catalog:
+## #Catalog:
 - [x]week_1
 	- [x] 1.2 基本屏幕输出
 	- [x] 1.3 基本输出之打印拼合字母
